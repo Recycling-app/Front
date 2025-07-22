@@ -2,4 +2,5 @@
 <resources>
 
     <style name="Theme.Recycling_app" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
+    <style name="Theme.Round_button" parent="Theme.AppCompat.Light" />
 </resources>
