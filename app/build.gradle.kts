@@ -2,8 +2,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-
-    id("com.google.gms.google-services")
 }
 
 android {
@@ -42,27 +40,6 @@ android {
 }
 
 dependencies {
-    // Google Play Services Location 라이브러리 (위치 정보 가져오기용)
-    implementation("com.google.android.gms:play-services-location:21.1.0")
-
-    // 카카오 벡터 맵 SDK
-    implementation("com.kakao.maps.open:android:2.12.8")
-
-    // 공공데이터 api
-    // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    // Converter ( JSON 타입 결과를 객체로 매핑 )
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-
-    // 네트워크 통신
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-
-    // 파베
-    implementation("com.google.firebase:firebase-firestore-ktx")
-    implementation(platform("com.google.firebase:firebase-bom:33.16.0"))
-    implementation("com.google.firebase:firebase-firestore:25.0.0")
-
     implementation("io.github.ParkSangGwon:tedpermission:2.3.0")
     implementation("com.google.android.material:material:1.12.0")
     implementation(libs.androidx.core.ktx)
