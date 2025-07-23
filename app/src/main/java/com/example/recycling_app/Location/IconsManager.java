@@ -2,8 +2,8 @@ package com.example.recycling_app.Location;
 
 import android.widget.TextView;
 
+import com.kakao.sdk.common.util.Utility;
 import androidx.cardview.widget.CardView;
-
 import com.example.recycling_app.R;
 import com.kakao.vectormap.KakaoMap;
 import com.kakao.vectormap.LatLng;
@@ -26,7 +26,7 @@ public class IconsManager {
     private final KakaoMap kakaoMap;
     private final CardView addressBox;
     private final TextView markerAddressTextView;
-    private final Map<Label, LocationData> markerDataMap = new HashMap<>();
+    private final Map<com.kakao.vectormap.label.Label, LocationData> markerDataMap = new HashMap<>();
 
     // *** 데이터 마커들을 위한 전용 레이어 ***
     private final LabelLayer dataMarkerLayer;
