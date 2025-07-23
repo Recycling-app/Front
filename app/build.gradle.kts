@@ -40,8 +40,11 @@ android {
 }
 
 dependencies {
+    implementation("com.kakao.maps.open:android:2.12.8")
+    implementation("com.kakao.sdk:v2-common:2.19.0")
     implementation("io.github.ParkSangGwon:tedpermission:2.3.0")
     implementation("com.google.android.material:material:1.12.0")
+    implementation("com.kakao.maps.open:android:2.12.8")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -52,6 +55,9 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.exifinterface)
+    implementation(libs.firebase.firestore)
+    implementation(libs.androidx.media3.common)
+    implementation(libs.play.services.location)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
