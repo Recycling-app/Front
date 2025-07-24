@@ -18,6 +18,10 @@ public class MainscreenActivity extends AppCompatActivity {
         ImageButton mapbox = findViewById(R.id.map_box);
         ImageButton howtobox = findViewById(R.id.howto_box);
         ImageButton communitybox = findViewById(R.id.community_box);
+        ImageButton cameraboxim = findViewById(R.id.camera_box_image);
+        ImageButton mapboxim = findViewById(R.id.map_box_image);
+        ImageButton howtoboxim = findViewById(R.id.howto_box_image);
+        ImageButton communityboxim = findViewById(R.id.community_box_image);
 
         ImageButton mapicon = findViewById(R.id.map_icon);
         ImageButton cameraicon = findViewById(R.id.camera_icon);
@@ -35,6 +39,14 @@ public class MainscreenActivity extends AppCompatActivity {
         });
 
         cameraicon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainscreenActivity.this, CameraActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        cameraboxim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainscreenActivity.this, CameraActivity.class);
@@ -60,11 +72,27 @@ public class MainscreenActivity extends AppCompatActivity {
             }
         });
 
+        mapboxim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainscreenActivity.this, LocationActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         /*      <!-- Acitvity 미정 -->
 
         // 재활용 방법 이동
         howtobox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainscreenActivity.this, Activity.class);
+                startActivity(intent);
+            }
+        });
+
+        howtoboxim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainscreenActivity.this, Activity.class);
@@ -90,6 +118,14 @@ public class MainscreenActivity extends AppCompatActivity {
             }
         });
 
+        communityboxim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainscreenActivity.this, Activity.class);
+                startActivity(intent);
+            }
+        });
+
          */
 
 
@@ -101,7 +137,6 @@ public class MainscreenActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
 
     }
 
