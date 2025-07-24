@@ -44,7 +44,6 @@ dependencies {
     implementation("com.kakao.sdk:v2-common:2.19.0")
     implementation("io.github.ParkSangGwon:tedpermission:2.3.0")
     implementation("com.google.android.material:material:1.12.0")
-    implementation("com.kakao.maps.open:android:2.12.8")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
