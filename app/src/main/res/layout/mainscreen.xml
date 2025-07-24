@@ -8,7 +8,7 @@
     tools:context=".MainActivity">
 
     <ImageView
-        android:id="@+id/image_main_header"
+        android:id="@+id/main_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
@@ -17,7 +17,9 @@
         android:src="@drawable/mainimage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+
+        android:contentDescription="배경사진"/>
 
     <ImageButton
         android:id="@+id/camera_box"
@@ -31,7 +33,9 @@
         app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.630" />
+        app:layout_constraintVertical_bias="0.630"
+
+        android:contentDescription="카메라 박스"/>
 
     <ImageButton
         android:id="@+id/map_box"
@@ -45,7 +49,9 @@
         app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.630" />
+        app:layout_constraintVertical_bias="0.630"
+
+        android:contentDescription="지도 박스"/>
 
     <ImageButton
         android:id="@+id/howto_box"
@@ -59,7 +65,9 @@
         app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.830" />
+        app:layout_constraintVertical_bias="0.830"
+
+        android:contentDescription="재활용 하는법 박스"/>
 
     <ImageButton
         android:id="@+id/community_box"
@@ -73,7 +81,9 @@
         app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.830" />
+        app:layout_constraintVertical_bias="0.830"
+
+        android:contentDescription="커뮤니티 박스"/>
 
     <!-- 언더 바 아이콘 -->
     <ImageView
@@ -82,7 +92,9 @@
         app:srcCompat="@drawable/underbar"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="789dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+
+        android:contentDescription="언더바"/>
 
     <ImageButton
         android:id="@+id/home_icon"
@@ -96,7 +108,9 @@
         app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.960" />
+        app:layout_constraintVertical_bias="0.960"
+
+        android:contentDescription="홈"/>
 
     <ImageButton
         android:id="@+id/map_icon"
@@ -110,7 +124,9 @@
         app:layout_constraintHorizontal_bias="0.3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.960" />
+        app:layout_constraintVertical_bias="0.960"
+
+        android:contentDescription="지도"/>
 
     <ImageButton
         android:id="@+id/camera_icon"
@@ -124,7 +140,9 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.960" />
+        app:layout_constraintVertical_bias="0.960"
+
+        android:contentDescription="카메라"/>
 
     <ImageButton
         android:id="@+id/message_icon"
@@ -138,7 +156,9 @@
         app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.960" />
+        app:layout_constraintVertical_bias="0.960"
+
+        android:contentDescription="커뮤니티"/>
 
     <ImageButton
         android:id="@+id/account_icon"
@@ -152,7 +172,9 @@
         app:layout_constraintHorizontal_bias="0.9"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.960" />
+        app:layout_constraintVertical_bias="0.960"
+
+        android:contentDescription="마이페이지"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -160,7 +182,9 @@
         app:srcCompat="@drawable/green_dot"
         tools:layout_editor_absoluteX="51.5dp"
         tools:layout_editor_absoluteY="860dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+
+        android:contentDescription="홈 아이콘 밑에 초록색 원"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
