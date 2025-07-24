@@ -25,7 +25,22 @@
         android:id="@+id/camera_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/camera_box"
+        android:background="@drawable/camera_box_b"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.630"
+
+        android:contentDescription="카메라 박스"/>
+    <ImageButton
+        android:id="@+id/camera_box_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/camera_box_1"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,7 +56,22 @@
         android:id="@+id/map_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/map_box"
+        android:background="@drawable/map_box_b"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.630"
+
+        android:contentDescription="지도 박스"/>
+    <ImageButton
+        android:id="@+id/map_box_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/map_box_1"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -57,7 +87,22 @@
         android:id="@+id/howto_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/howto_box"
+        android:background="@drawable/howto_box_b"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.830"
+
+        android:contentDescription="재활용 하는법 박스"/>
+    <ImageButton
+        android:id="@+id/howto_box_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/howto_box_1"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -73,7 +118,22 @@
         android:id="@+id/community_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/community_box"
+        android:background="@drawable/community_box_b"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.830"
+
+        android:contentDescription="커뮤니티 박스"/>
+    <ImageButton
+        android:id="@+id/community_box_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/community_box_1"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
