@@ -5,36 +5,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".Camera_recognition.CameraActivity">
 
-    <!-- 상단 검은색 패널 -->
+    <androidx.camera.view.PreviewView
+        android:id="@+id/cameraPreview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <TextView
         android:id="@+id/topPanel"
         android:layout_width="0dp"
-        android:layout_height="150dp"
+        android:layout_height="100dp"
         android:background="@android:color/black"
-        android:gravity="center"
-        android:text="쓰레기 촬영"
-        android:textColor="@android:color/white"
-        android:textSize="40dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="쓰레기 촬영"
+        android:textSize="30dp"
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        />
 
-    <ImageButton
-        android:id="@+id/button_back"
-        android:layout_width="102dp"
-        android:layout_height="58dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="48dp"
-        android:background="@android:color/black"
-        android:scaleType="fitCenter"
-        android:src="@drawable/back_button_icon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- 하단 컨트롤 패널 -->
     <FrameLayout
         android:id="@+id/bottom_control_panel"
         android:layout_width="match_parent"
@@ -42,7 +33,6 @@
         android:background="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
@@ -50,25 +40,21 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
-            android:background="@drawable/capturebutton"
-            android:text="촬영"
+            android:background="@drawable/capture_button_background"
             android:textColor="@android:color/black"
-            android:textSize="30dp"
             android:textStyle="bold" />
 
     </FrameLayout>
 
-    <ImageView
-        android:id="@+id/imageview"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="#EEEEEE"
-        android:contentDescription="촬영된 이미지"
-        app:layout_constraintBottom_toTopOf="@id/bottom_control_panel"
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topPanel"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
