@@ -45,6 +45,11 @@
         </activity>
 
         <activity android:name=".CameraActivity" />
+        <activity android:name=".LocationActivity" />
+        <activity android:name=".MainscreenActivity" />
+
+        <!-- 내용이 없어서 활성화하면 에러남 <activity android:name=".MypageActivity" />
+        <activity android:name=".SettingActivity" /> -->
 
 
         <provider
