@@ -114,6 +114,7 @@ public class LocationActivity extends AppCompatActivity implements LocationAcces
         addressBox = findViewById(R.id.address_box); // xml에 정의된 ID로 가정
         markerTypeTextView = findViewById(R.id.tv_marker_type);
         filterButton = findViewById(R.id.filter_button);
+        filterButton.bringToFront();
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         filterButton.setOnClickListener(v -> showFilterDialog());
@@ -444,7 +445,7 @@ public class LocationActivity extends AppCompatActivity implements LocationAcces
 
         List<LocationData> results = new ArrayList<>();
         for (LocationData data : allLocations) {
-            if (data.address.contains(query)) {
+            if (data.address.contains(query) && activeFilters.contains(data.type)) {
                 results.add(data);
             }
         }

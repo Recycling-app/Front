@@ -15,6 +15,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageButton
+        android:id="@+id/filter_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/list"
+        android:contentDescription="필터"
+        android:padding="8dp"
+        android:src="@android:drawable/ic_menu_sort_by_size"
+        app:layout_constraintEnd_toEndOf="@+id/search_view"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="0" />
+
     <androidx.appcompat.widget.SearchView
         android:id="@+id/search_view"
         android:layout_width="0dp"
@@ -29,18 +44,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:queryHint="주소 검색" />
-
-    <ImageButton
-        android:id="@+id/filter_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="?attr/selectableItemBackground"
-        android:contentDescription="필터"
-        android:padding="8dp"
-        android:src="@android:drawable/ic_menu_sort_by_size"
-        app:layout_constraintEnd_toEndOf="@+id/search_view"
-        app:layout_constraintTop_toBottomOf="@+id/search_view" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
