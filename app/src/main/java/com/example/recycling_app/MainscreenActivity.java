@@ -3,9 +3,14 @@ package com.example.recycling_app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.FirebaseApp;
 import com.kakao.vectormap.KakaoMapSdk;
@@ -17,19 +22,44 @@ public class MainscreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainscreen);
 
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
         ImageButton camerabox = findViewById(R.id.camera_box);
         ImageButton mapbox = findViewById(R.id.map_box);
         ImageButton howtobox = findViewById(R.id.howto_box);
         ImageButton communitybox = findViewById(R.id.community_box);
-        ImageButton cameraboxim = findViewById(R.id.camera_box_image);
-        ImageButton mapboxim = findViewById(R.id.map_box_image);
-        ImageButton howtoboxim = findViewById(R.id.howto_box_image);
-        ImageButton communityboxim = findViewById(R.id.community_box_image);
 
         ImageButton mapicon = findViewById(R.id.map_icon);
         ImageButton cameraicon = findViewById(R.id.camera_icon);
         ImageButton messageicon = findViewById(R.id.message_icon);
         ImageButton accounticon = findViewById(R.id.account_icon);
+
+        ImageView main_header = findViewById(R.id.main_header);
+        ImageView underbar = findViewById(R.id.underbar);
+
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (view, insets) -> {
+            // 시스템 바의 크기를 가져옵니다.
+            int topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
+            int bottomInset = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom;
+
+            if (main_header.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) main_header.getLayoutParams();
+                params.topMargin = topInset + (int) (getResources().getDisplayMetrics().density);
+                main_header.setLayoutParams(params);
+            }
+
+            // 하단 주소창의 하단 마진을 내비게이션 바 높이만큼 추가합니다.
+            if (underbar.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) underbar.getLayoutParams();
+                params.bottomMargin = bottomInset + (int) (getResources().getDisplayMetrics().density);
+                underbar.setLayoutParams(params);
+            }
+
+            return WindowInsetsCompat.CONSUMED; // Insets을 소비했음을 시스템에 알립니다.
+        });
+
+
 
 
         // 카메라 이동
@@ -42,14 +72,6 @@ public class MainscreenActivity extends AppCompatActivity {
         });
 
         cameraicon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainscreenActivity.this, CameraActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        cameraboxim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainscreenActivity.this, CameraActivity.class);
@@ -75,27 +97,11 @@ public class MainscreenActivity extends AppCompatActivity {
             }
         });
 
-        mapboxim.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainscreenActivity.this, LocationActivity.class);
-                startActivity(intent);
-            }
-        });
-
 
         /*      <!-- Acitvity 미정 -->
 
         // 재활용 방법 이동
         howtobox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainscreenActivity.this, Activity.class);
-                startActivity(intent);
-            }
-        });
-
-        howtoboxim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainscreenActivity.this, Activity.class);
@@ -114,14 +120,6 @@ public class MainscreenActivity extends AppCompatActivity {
         });
 
         messageicon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainscreenActivity.this, Activity.class);
-                startActivity(intent);
-            }
-        });
-
-        communityboxim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainscreenActivity.this, Activity.class);
