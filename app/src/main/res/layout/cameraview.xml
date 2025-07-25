@@ -11,18 +11,31 @@
     <TextView
         android:id="@+id/topPanel"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="150dp"
         android:background="@android:color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="쓰레기 촬영"
-        android:textSize="30dp"
-        android:textColor="@android:color/white"
         android:gravity="center"
-        />
+        android:text="쓰레기 촬영"
+        android:textColor="@android:color/white"
+        android:textSize="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- 하단 컨트롤 패널 -->
+
+    <ImageButton
+        android:id="@+id/button_back"
+        android:layout_width="102dp"
+        android:layout_height="58dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="48dp"
+        android:background="@android:color/black"
+        android:scaleType="fitCenter"
+        android:src="@drawable/back_button_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <FrameLayout
         android:id="@+id/bottom_control_panel"
         android:layout_width="match_parent"
@@ -30,6 +43,7 @@
         android:background="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
@@ -39,8 +53,8 @@
             android:layout_gravity="center"
             android:background="@drawable/capturebutton"
             android:text="촬영"
-            android:textSize="30dp"
             android:textColor="@android:color/black"
+            android:textSize="30dp"
             android:textStyle="bold" />
 
     </FrameLayout>
@@ -53,7 +67,9 @@
         android:contentDescription="촬영된 이미지"
         app:layout_constraintBottom_toTopOf="@id/bottom_control_panel"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topPanel" />
+        app:layout_constraintTop_toBottomOf="@id/topPanel"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
