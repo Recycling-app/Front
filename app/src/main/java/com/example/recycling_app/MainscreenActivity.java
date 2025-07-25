@@ -7,6 +7,9 @@ import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.FirebaseApp;
+import com.kakao.vectormap.KakaoMapSdk;
+
 public class MainscreenActivity extends AppCompatActivity {
 
     @Override
