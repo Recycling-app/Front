@@ -33,7 +33,7 @@
             android:value="f74b1223cc505a613aeb568c3277ff52" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".MainscreenActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Recycling_app">
@@ -46,7 +46,7 @@
 
         <activity android:name=".CameraActivity" />
         <activity android:name=".LocationActivity" />
-        <activity android:name=".MainscreenActivity" />
+        <activity android:name=".MainActivity" />
 
         <!-- 내용이 없어서 활성화하면 에러남 <activity android:name=".MypageActivity" />
         <activity android:name=".SettingActivity" /> -->

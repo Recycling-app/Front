@@ -38,6 +38,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.kakao.vectormap.KakaoMap;
 import com.kakao.vectormap.KakaoMapReadyCallback;
@@ -98,10 +99,12 @@ public class LocationActivity extends AppCompatActivity implements LocationAcces
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // SDK 초기화
+        FirebaseApp.initializeApp(this);
         KakaoMapSdk.init(this, "f74b1223cc505a613aeb568c3277ff52");
         super.onCreate(savedInstanceState);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(R.layout.location_main);
+
 
         db = FirebaseFirestore.getInstance();
 
@@ -199,31 +202,34 @@ public class LocationActivity extends AppCompatActivity implements LocationAcces
                 });
 
                 dataFetcher = new fetchDataFromFirestore();
-                dataFetcher.fetchAllLocations(new fetchDataFromFirestore.OnDataReadyCallback() {
-                    @Override
-                    public void onDataReady(List<LocationData> locations) {
-                        // 데이터 로딩 성공!
-                        // 받아온 데이터를 MainActivity의 allLocations 리스트에 저장합니다.
-                        LocationActivity.this.allLocations.clear();
-                        LocationActivity.this.allLocations.addAll(locations);
+                if (allLocations.isEmpty()) {
+                    dataFetcher.fetchAllLocations(new fetchDataFromFirestore.OnDataReadyCallback() {
+                        @Override
+                        public void onDataReady(List<LocationData> locations) {
+                            // 데이터 로딩 성공!
+                            // 받아온 데이터를 MainActivity의 allLocations 리스트에 저장합니다.
+                            LocationActivity.this.allLocations.clear();
+                            LocationActivity.this.allLocations.addAll(locations);
 
-                        Log.d("MainActivity", "Firestore로부터 " + locations.size() + "개의 데이터를 성공적으로 로드했습니다.");
-                        Toast.makeText(LocationActivity.this, "모든 수거함 정보를 불러왔습니다.", Toast.LENGTH_SHORT).show();
+                            Log.d("MainActivity", "Firestore로부터 " + locations.size() + "개의 데이터를 성공적으로 로드했습니다.");
+                            Toast.makeText(LocationActivity.this, "모든 수거함 정보를 불러왔습니다.", Toast.LENGTH_SHORT).show();
 
-                        // 이제 데이터가 준비되었으니, 현재 지도 중심을 기준으로 마커를 표시합니다.
-                        // 지도가 준비된 후 첫 마커 표시는 여기서 이루어집니다.
-                        if (kakaoMap != null) {
-                            filterAndDisplayMarkers(kakaoMap.getCameraPosition().getPosition());
+                            // 이제 데이터가 준비되었으니, 현재 지도 중심을 기준으로 마커를 표시합니다.
+                            // 지도가 준비된 후 첫 마커 표시는 여기서 이루어집니다.
+                            if (kakaoMap != null) {
+                                filterAndDisplayMarkers(kakaoMap.getCameraPosition().getPosition());
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onDataFetchFailed(String errorMessage) {
-                        // 데이터 로딩 실패!
-                        Log.e("MainActivity", "데이터 로드 실패: " + errorMessage);
-                        Toast.makeText(LocationActivity.this, "데이터를 불러오는 데 실패했습니다.", Toast.LENGTH_LONG).show();
-                    }
-                });
+
+                        @Override
+                        public void onDataFetchFailed(String errorMessage) {
+                            // 데이터 로딩 실패!
+                            Log.e("MainActivity", "데이터 로드 실패: " + errorMessage);
+                            Toast.makeText(LocationActivity.this, "데이터를 불러오는 데 실패했습니다.", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
 
                 kakaoMap.setOnCameraMoveEndListener((kakaoMap1, cameraPosition, gestureType) -> {
                     // 지도 이동이 완료된 시점의 지도 중심 좌표를 가져옵니다.
@@ -488,13 +494,18 @@ public class LocationActivity extends AppCompatActivity implements LocationAcces
     @Override
     protected void onResume() {
         super.onResume();
+        if (mapView != null) {
+                 mapView.resume();
+             }
     }
 
     // 업뎃 중지
     @Override
     protected void onPause() {
         super.onPause();
-        if (mapView != null) mapView.pause(); // 여기서 충돌 발생
+        if (mapView != null) {
+            mapView.pause();
+        }
         if (fusedLocationClient != null && locationCallback != null) {
             fusedLocationClient.removeLocationUpdates(locationCallback);
             Log.d("Location", "위치 업데이트가 중지되었습니다.");
