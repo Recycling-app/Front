@@ -12,8 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.firebase.FirebaseApp;
-import com.kakao.vectormap.KakaoMapSdk;
+import com.example.recycling_app.Camera_recognition.CameraActivity;
 
 public class MainscreenActivity extends AppCompatActivity {
 

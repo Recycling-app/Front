@@ -14,6 +14,7 @@ firebaseFirestore = "26.0.0"
 media3Common = "1.7.1"
 playServicesLocation = "21.3.0"
 material = "1.12.0"
+roomCompiler = "2.7.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -36,6 +37,7 @@ firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore
 androidx-media3-common = { group = "androidx.media3", name = "media3-common", version.ref = "media3Common" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
