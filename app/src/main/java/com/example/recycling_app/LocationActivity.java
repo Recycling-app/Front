@@ -117,10 +117,10 @@ public class LocationActivity extends AppCompatActivity implements LocationAcces
         addressBox = findViewById(R.id.address_box); // xml에 정의된 ID로 가정
         markerTypeTextView = findViewById(R.id.tv_marker_type);
         filterButton = findViewById(R.id.filter_button);
-        filterButton.bringToFront();
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         filterButton.setOnClickListener(v -> showFilterDialog());
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (view, insets) -> {
             // 시스템 바(상태 바, 내비게이션 바)의 크기를 가져옵니다.
