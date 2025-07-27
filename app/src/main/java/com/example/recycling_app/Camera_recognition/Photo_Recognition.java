@@ -68,13 +68,7 @@ public class Photo_Recognition extends AppCompatActivity {
         resultTextView = findViewById(R.id.resultTextView);
         progressBar = findViewById(R.id.progressBar);
 
-        // =================================================================
-        // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ 하단 네비게이션 버튼 기능 추가 ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
-        // =================================================================
         setupBottomNavigation();
-        // =================================================================
-        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ 하단 네비게이션 버튼 기능 추가 ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
-        // =================================================================
 
         String imageUriString = getIntent().getStringExtra("imageUri");
         if (imageUriString == null) {
@@ -144,10 +138,10 @@ public class Photo_Recognition extends AppCompatActivity {
     }
 
     private void askGemini(String topic) {
-        GenerativeModel gm = new GenerativeModel("gemini-1.5-flash", BuildConfig.GEMINI_API_KEY);
-        GenerativeModelFutures model = GenerativeModelFutures.from(gm);
 
-        String prompt = "'" + topic + "'의 올바른 분리수거 방법을 단계별로 특수기호, 특수문자 빼고 설명할 때 앞에 1., 2., 3. 이런 거 붙여서 분리수거 방법을 알려주세요.";
+        GenerativeModel gm = new GenerativeModel("gemini-2.5-flash", BuildConfig.GEMINI_API_KEY);
+        GenerativeModelFutures model = GenerativeModelFutures.from(gm);
+        String prompt = "'" + topic + "'의 올바른 분리수거 방법을 단계별로 특수기호, 특수문자 빼고 설명할 때 앞에 1., 2., 3. 이런 거 붙여서 순서마다 한줄 씩 띄어서 분리수거 방법을 알려주세요.";
         Content content = new Content.Builder().addText(prompt).build();
 
         Futures.addCallback(model.generateContent(content), new FutureCallback<GenerateContentResponse>() {
