@@ -11,7 +11,7 @@
     <ImageView
         android:id="@+id/howToRecycleText"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:src="@drawable/how_to_recycle"
         android:adjustViewBounds="true"
         app:layout_constraintTop_toTopOf="parent"
@@ -19,8 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/recycle_box_image"
         app:layout_constraintVertical_chainStyle="packed"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginTop="30dp" />
 
     <!-- 상단 그림 -->
     <ImageView
@@ -42,7 +41,7 @@
     <View
         android:id="@+id/white_background"
         android:layout_width="0dp"
-        android:layout_height="500dp"
+        android:layout_height="650dp"
         android:background="@drawable/white_rounded_top_background"
         app:layout_constraintBottom_toTopOf="@+id/underbar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -61,6 +60,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="50dp"
         android:elevation="4dp"/>
 
     <ImageButton
