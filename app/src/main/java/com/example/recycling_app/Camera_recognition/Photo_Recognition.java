@@ -68,14 +68,7 @@ public class Photo_Recognition extends AppCompatActivity {
         resultTextView = findViewById(R.id.resultTextView);
         progressBar = findViewById(R.id.progressBar);
 
-        // =================================================================
-        // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ 하단 네비게이션 버튼 기능 추가 ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
-        // =================================================================
         setupBottomNavigation();
-        // =================================================================
-        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ 하단 네비게이션 버튼 기능 추가 ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
-        // =================================================================
-
         String imageUriString = getIntent().getStringExtra("imageUri");
         if (imageUriString == null) {
             Toast.makeText(this, "오류: 이미지 경로를 받지 못했습니다.", Toast.LENGTH_LONG).show();
