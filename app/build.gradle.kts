@@ -14,6 +14,10 @@ if (localPropertiesFile.exists()) {
 }
 
 android {
+
+    namespace = "com.example.recycling_app"
+    compileSdk = 36
+
     signingConfigs {
         create("release") {
             storeFile = file(property("MYAPP_RELEASE_STORE_FILE") as String)
@@ -23,8 +27,11 @@ android {
         }
     }
 
-    namespace = "com.example.recycling_app"
-    compileSdk = 36
+    buildTypes {
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
 
     defaultConfig {
         applicationId = "com.example.recycling_app"
@@ -37,11 +44,6 @@ android {
     }
 
     buildTypes {
-        getByName("release") {
-            // 생성한 release 서명 설정을 release 빌드 타입에 적용
-            signingConfig = signingConfigs.getByName("release")
-            // ...
-        }
         release {
             isMinifyEnabled = false
             proguardFiles(
