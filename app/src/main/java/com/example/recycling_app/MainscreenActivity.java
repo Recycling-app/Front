@@ -1,7 +1,12 @@
 package com.example.recycling_app;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -14,6 +19,9 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.recycling_app.Camera_recognition.CameraActivity;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import com.kakao.sdk.common.util.Utility;
 public class MainscreenActivity extends AppCompatActivity {
 
     @Override
@@ -139,5 +147,4 @@ public class MainscreenActivity extends AppCompatActivity {
         });
 
     }
-
 }

@@ -14,6 +14,14 @@ if (localPropertiesFile.exists()) {
 }
 
 android {
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("C:\\Users\\user\\Desktop\\hack\\Front\\Front\\Front")
+            storePassword = "likelionnsu"
+            keyAlias = "key0"
+            keyPassword = "likelionnsu"
+        }
+    }
     namespace = "com.example.recycling_app"
     compileSdk = 36
 
