@@ -6,19 +6,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context=".Camera_recognition.Photo_Recognition">
+    tools:context=".Camera_recognition.Photo_Recognition"
+    android:paddingBottom="45dp">
 
+    <!-- 상단바 -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topBar"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:background="@drawable/camera_box_1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- 상단바 메시지 -->
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="사진 인식 결과"
+            android:textColor="@android:color/black"
+            android:fontFamily="@font/nanumgothicextrabold"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_gravity="bottom|center_horizontal"
+            android:paddingBottom="10dp"/>
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <!-- 찍은 사진 -->
     <ImageView
         android:id="@+id/resultImageView"
         android:layout_width="0dp"
         android:layout_height="300dp"
         android:scaleType="centerCrop"
         android:contentDescription="촬영된 사진"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:src="@tools:sample/backgrounds/scenic" />
 
+    <!-- 결과창 -->
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="0dp"
@@ -33,18 +60,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <!-- 반투명 배경 -->
             <ImageView
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/camera_box_1"
                 android:scaleType="centerCrop"
-                android:alpha="0.5" />
+                android:alpha="0.4" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+            <!-- 결과 출력 -->
                 <TextView
                     android:id="@+id/resultTextView"
                     android:layout_width="match_parent"
@@ -53,12 +82,13 @@
                     android:padding="16dp"
                     android:textColor="@android:color/black"
                     android:fontFamily="@font/nanumgothicextrabold"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
             </LinearLayout>
         </FrameLayout>
     </ScrollView>
 
+    <!-- 진행 표시 -->
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
@@ -70,9 +100,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:visibility="visible"/>
 
+    <!-- 언더바와 아이콘 -->
     <ImageView
         android:id="@+id/underbar"
-        android:layout_width="412dp"
+        android:layout_width="0dp"
         android:layout_height="67dp"
         android:contentDescription="언더바"
         android:elevation="8dp"
