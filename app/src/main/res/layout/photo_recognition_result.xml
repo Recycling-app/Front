@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context=".Camera_recognition.Photo_Recognition">
+    tools:context=".Camera_recognition.Photo_Recognition"
+    android:paddingBottom="45dp">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/topBar"
@@ -28,7 +29,6 @@
             android:textStyle="bold"
             android:layout_gravity="bottom|center_horizontal"
             android:paddingBottom="10dp"/>
-
     </com.google.android.material.appbar.MaterialToolbar>
 
     <ImageView
@@ -64,9 +64,9 @@
                 android:alpha="0.5" />
 
             <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/resultTextView"
@@ -79,7 +79,6 @@
                     android:textSize="20sp"
                     android:textStyle="bold" />
             </LinearLayout>
-
         </FrameLayout>
     </ScrollView>
 
@@ -105,7 +104,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/underbar" />
+        app:srcCompat="@drawable/underbar"
+        />
 
     <ImageButton
         android:id="@+id/home_icon"
@@ -176,6 +176,4 @@
         app:layout_constraintEnd_toEndOf="@+id/underbar"
         app:layout_constraintHorizontal_bias="0.9"
         />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

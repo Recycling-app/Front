@@ -87,7 +87,7 @@
     <ImageView
         android:id="@+id/underbar"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:contentDescription="언더바"
         android:scaleType="fitXY"
         app:srcCompat="@drawable/underbar"
