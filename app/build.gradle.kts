@@ -15,13 +15,14 @@ if (localPropertiesFile.exists()) {
 
 android {
     signingConfigs {
-        getByName("debug") {
-            storeFile = file("C:\\Users\\user\\Desktop\\hack\\Front\\Front\\Front")
-            storePassword = "likelionnsu"
-            keyAlias = "key0"
-            keyPassword = "likelionnsu"
+        create("release") {
+            storeFile = file(property("MYAPP_RELEASE_STORE_FILE") as String)
+            storePassword = property("MYAPP_RELEASE_STORE_PASSWORD") as String
+            keyAlias = property("MYAPP_RELEASE_KEY_ALIAS") as String
+            keyPassword = property("MYAPP_RELEASE_KEY_PASSWORD") as String
         }
     }
+
     namespace = "com.example.recycling_app"
     compileSdk = 36
 
@@ -36,6 +37,11 @@ android {
     }
 
     buildTypes {
+        getByName("release") {
+            // 생성한 release 서명 설정을 release 빌드 타입에 적용
+            signingConfig = signingConfigs.getByName("release")
+            // ...
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(

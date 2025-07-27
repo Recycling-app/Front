@@ -42,6 +42,10 @@
 hs_err_pid*
 replay_pid*
 
+# Keystore files
+*.jks
+*.keystore
+
 ### Kotlin ###
 # Compiled class file
 
