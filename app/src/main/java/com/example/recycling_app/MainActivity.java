@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.recycling_app.api.ApiService;
-//import com.example.recycling_app.dto.GoogleLoginRequest;
+import com.example.recycling_app.dto.GoogleLoginRequest;
 import com.example.recycling_app.dto.JwtLoginResponse;
 import com.example.recycling_app.network.RetrofitClient;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -42,13 +42,11 @@ public class MainActivity extends AppCompatActivity {
         apiService = RetrofitClient.getApiService();
 
         // Google Sign-In 설정
-        // R.string.default_web_client_id는 google-services.json 파일에서 자동으로 생성됩니다.
-        // Firebase 프로젝트를 설정하고 Google Sign-In을 활성화해야 합니다.
-//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestIdToken(getString(R.string.default_web_client_id)) // 백엔드에서 ID 토큰 검증 시 필요
-//                .requestEmail() // 이메일 정보 요청
-//                .build();
-//        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         // UI 요소들을 XML ID와 연결
         Button loginButton = findViewById(R.id.login_button);
@@ -66,12 +64,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // "Sign in with Google" 버튼 클릭 리스너 (Google 로그인 시작)
-//        googleLoginButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                signInWithGoogle(); // 이 라인 주석 해제하여 기능 활성화
-//            }
-//        });
+        googleLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signInWithGoogle();
+            }
+        });
 
         // "회원가입" 텍스트뷰 클릭 리스너
         signupTextView.setOnClickListener(new View.OnClickListener() {
@@ -93,83 +91,109 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Google 로그인 인텐트 시작
-//    private void signInWithGoogle() {
-//        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-//        startActivityForResult(signInIntent, RC_SIGN_IN);
-//    }
+    private void signInWithGoogle() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
 
     // Google 로그인 결과 처리
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (requestCode == RC_SIGN_IN) {
-//            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-//            handleSignInResult(task);
-//        }
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }
+    }
 
     // Google 로그인 결과 핸들링
-//    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-//        try {
-//            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-//            String idToken = account.getIdToken(); // 백엔드로 보낼 ID 토큰
-//
-//            if (idToken != null) {
-//                sendIdTokenToBackend(idToken);
-//            } else {
-//                Toast.makeText(this, "Google ID Token을 가져올 수 없습니다.", Toast.LENGTH_SHORT).show();
-//                Log.e(TAG, "Google ID Token is null.");
-//            }
-//        } catch (ApiException e) {
-//            // Google 로그인 실패 (예: 사용자가 취소, 네트워크 오류 등)
-//            Log.w(TAG, "Google 로그인 실패: statusCode=" + e.getStatusCode() + ", message=" + e.getMessage());
-//            Toast.makeText(this, "Google 로그인 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-//        }
-//    }
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            String idToken = account.getIdToken(); // 백엔드로 보낼 ID 토큰
+            String email = account.getEmail(); // Google 계정 이메일
 
-    // 백엔드로 Google ID 토큰 전송
-//    private void sendIdTokenToBackend(String idToken) {
-//        GoogleLoginRequest request = new GoogleLoginRequest(idToken);
-//        Call<JwtLoginResponse> call = apiService.googleLogin(request); // 백엔드의 googleLogin 엔드포인트 호출
-//
-//        call.enqueue(new Callback<JwtLoginResponse>() {
-//            @Override
-//            public void onResponse(Call<JwtLoginResponse> call, Response<JwtLoginResponse> response) {
-//                if (response.isSuccessful() && response.body() != null) {
-//                    JwtLoginResponse jwtResponse = response.body();
-//                    String accessToken = jwtResponse.getAccessToken();
-//                    String refreshToken = jwtResponse.getRefreshToken();
-//
-//                    Toast.makeText(MainActivity.this, "Google 로그인 성공!", Toast.LENGTH_LONG).show();
-//                    Log.d(TAG, "Google 로그인 성공: Access Token = " + accessToken);
-//
-//                    // 성공 시 앱의 메인 콘텐츠 화면으로 이동 (현재는 MainActivity로 다시 이동)
-//                    Intent intent = new Intent(MainActivity.this, MainActivity.class);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    startActivity(intent);
-//                    finish();
-//                } else {
-//                    String errorMessage = "Google 로그인 실패";
-//                    try {
-//                        if (response.errorBody() != null) {
-//                            String errorBodyString = response.errorBody().string();
-//                            Log.e(TAG, "Google Login Error Body: " + errorBodyString);
-//                            errorMessage += ": " + errorBodyString;
-//                        }
-//                    } catch (Exception e) {
-//                        Log.e(TAG, "Error parsing Google login error body", e);
-//                    }
-//                    Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_LONG).show();
-//                    Log.e(TAG, "Google 로그인 응답 실패: HTTP " + response.code() + " " + response.message());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<JwtLoginResponse> call, Throwable t) {
-//                Toast.makeText(MainActivity.this, "네트워크 오류: " + t.getMessage(), Toast.LENGTH_LONG).show();
-//                Log.e(TAG, "Google 로그인 요청 실패 (네트워크 오류)", t);
-//            }
-//        });
-//    }
+            if (idToken != null) {
+                sendIdTokenToBackend(idToken, email); // 이메일도 함께 전달
+            } else {
+                Toast.makeText(this, "Google ID Token을 가져올 수 없습니다.", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Google ID Token is null.");
+            }
+        } catch (ApiException e) {
+            Log.w(TAG, "Google 로그인 실패: statusCode=" + e.getStatusCode() + ", message=" + e.getMessage());
+            Toast.makeText(this, "Google 로그인 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // 백엔드로 Google ID 토큰 전송 (이메일 매개변수 추가)
+    private void sendIdTokenToBackend(String idToken, String email) {
+        GoogleLoginRequest request = new GoogleLoginRequest(idToken);
+        Call<JwtLoginResponse> call = apiService.googleLogin(request);
+
+        call.enqueue(new Callback<JwtLoginResponse>() {
+            @Override
+            public void onResponse(Call<JwtLoginResponse> call, Response<JwtLoginResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    // Google 로그인 성공 (이미 등록된 사용자)
+                    JwtLoginResponse jwtResponse = response.body();
+                    String accessToken = jwtResponse.getAccessToken();
+                    String refreshToken = jwtResponse.getRefreshToken();
+
+                    Toast.makeText(MainActivity.this, "Google 로그인 성공!", Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "Google 로그인 성공: Access Token = " + accessToken);
+
+                    // 로그인 성공 시 앱의 메인 콘텐츠 화면으로 이동
+                    Intent intent = new Intent(MainActivity.this, MainActivity.class); // 예시: MainActivity로 이동
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                } else if (response.code() == 401 || response.code() == 404) { // 백엔드에서 '등록된 사용자 아님' 응답 (UNAUTHORIZED 또는 NOT_FOUND)
+                    String errorBodyString = "";
+                    try {
+                        if (response.errorBody() != null) {
+                            errorBodyString = response.errorBody().string();
+                            Log.e(TAG, "Google Login Error Body (Signup Required): " + errorBodyString);
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error parsing Google login error body", e);
+                    }
+
+                    // 백엔드에서 "등록된 사용자가 아닙니다. 먼저 회원가입하세요." 메시지를 보낸다고 가정
+                    if (errorBodyString.contains("등록된 사용자가 아닙니다")) {
+                        Toast.makeText(MainActivity.this, "Google 계정으로 회원가입이 필요합니다.", Toast.LENGTH_LONG).show();
+                        // GoogleAdditionalInfoActivity로 이동하여 추가 정보 입력받기
+                        Intent intent = new Intent(MainActivity.this, GoogleAdditionalInfoActivity.class);
+                        intent.putExtra("idToken", idToken); // ID 토큰 전달
+                        intent.putExtra("email", email); // Google 계정 이메일 전달
+                        startActivity(intent);
+                    } else {
+                        // 다른 401/404 오류 처리
+                        Toast.makeText(MainActivity.this, "Google 로그인 실패: " + errorBodyString, Toast.LENGTH_LONG).show();
+                        Log.e(TAG, "Google 로그인 응답 실패 (다른 401/404): HTTP " + response.code() + " " + response.message());
+                    }
+                } else {
+                    // 기타 HTTP 오류 처리
+                    String errorMessage = "Google 로그인 실패";
+                    try {
+                        if (response.errorBody() != null) {
+                            String errorBodyString = response.errorBody().string();
+                            Log.e(TAG, "Google Login Error Body: " + errorBodyString);
+                            errorMessage += ": " + errorBodyString;
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error parsing Google login error body", e);
+                    }
+                    Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                    Log.e(TAG, "Google 로그인 응답 실패: HTTP " + response.code() + " " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JwtLoginResponse> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "네트워크 오류: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                Log.e(TAG, "Google 로그인 요청 실패 (네트워크 오류)", t);
+            }
+        });
+    }
 }

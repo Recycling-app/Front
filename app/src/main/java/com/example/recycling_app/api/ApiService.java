@@ -1,4 +1,3 @@
-// app/src/main/java/com/example/recycling_app/api/ApiService.java
 package com.example.recycling_app.api;
 
 import com.example.recycling_app.dto.FindEmailRequest;
@@ -24,11 +23,11 @@ public interface ApiService {
     @POST("api/auth/login")
     Call<JwtLoginResponse> loginUser(@Body LoginRequest request);
 
-    // Google 회원가입 API 엔드포인트 (백엔드 AuthController에 정의됨)
+    // Google 회원가입 API 엔드포인트 (백엔드에서 Google 로그인과 별도로 회원가입을 처리한다면 필요)
     @POST("api/auth/google/signup")
     Call<String> googleSignup(@Body GoogleSignupRequest request);
 
-    // Google 로그인 API 엔드포인트 (백엔드 AuthController에 정의됨)
+    // Google 로그인 API 엔드포인트
     @POST("api/auth/google/login")
     Call<JwtLoginResponse> googleLogin(@Body GoogleLoginRequest request);
 
