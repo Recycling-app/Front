@@ -21,6 +21,8 @@ import com.example.recycling_app.LocationActivity;
 import com.example.recycling_app.MainscreenActivity;
 import com.example.recycling_app.MypageActivity;
 import com.example.recycling_app.R;
+import com.example.recycling_app.Howtobox.Guidearea_select;
+
 public class Wasteguide extends AppCompatActivity {
 
     @Override
@@ -28,9 +30,20 @@ public class Wasteguide extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wasteguide);
 
+        setupGuideAreaNavigation(); // 주소 검색 클릭 시 이동 설정
         setupBottomNavigation(); // 하단 내비게이션 아이콘들의 클릭 이벤트를 설정하는 메서드
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false); // Edge-to-Edge UI를 활성화
         applyWindowInsets(); // 시스템 UI와 여백을 맞추는 로직을 적용
+    }
+    
+    // 주소 선택 클릭 이벤트를 설정하는 메서드
+    private void setupGuideAreaNavigation() {
+        View guideAreaSearchBox = findViewById(R.id.guidearea_search_box);
+
+        guideAreaSearchBox.setOnClickListener(v -> {
+            Intent intent = new Intent(Wasteguide.this, Guidearea_select.class);
+            startActivity(intent);
+        });
     }
 
     // 하단 내비게이션 아이콘들의 클릭 이벤트를 설정하는 메서드
@@ -40,6 +53,7 @@ public class Wasteguide extends AppCompatActivity {
         ImageButton cameraIcon = findViewById(R.id.camera_icon);
         ImageButton messageIcon = findViewById(R.id.message_icon);
         ImageButton accountIcon = findViewById(R.id.account_icon);
+
 
         homeIcon.setOnClickListener(v -> {
             Intent intent = new Intent(Wasteguide.this, MainscreenActivity.class);
