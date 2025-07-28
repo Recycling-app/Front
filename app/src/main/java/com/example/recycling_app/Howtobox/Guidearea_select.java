@@ -1,49 +1,35 @@
 package com.example.recycling_app.Howtobox;
 
-import static com.google.android.material.internal.EdgeToEdgeUtils.applyEdgeToEdge;
-
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.recycling_app.Camera_recognition.CameraActivity;
 import com.example.recycling_app.Camera_recognition.Photo_Recognition;
-import com.example.recycling_app.Commuity.Commuity;
 import com.example.recycling_app.LocationActivity;
 import com.example.recycling_app.MainscreenActivity;
 import com.example.recycling_app.MypageActivity;
 import com.example.recycling_app.R;
-import com.example.recycling_app.Howtobox.Guidearea_select;
 
-public class Wasteguide extends AppCompatActivity {
-
+public class Guidearea_select extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.wasteguide);
+        setContentView(R.layout.guidearea_select);
 
-        setupGuideAreaNavigation(); // 주소 검색 클릭 시 이동 설정
         setupBottomNavigation(); // 하단 내비게이션 아이콘들의 클릭 이벤트를 설정하는 메서드
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false); // Edge-to-Edge UI를 활성화
         applyWindowInsets(); // 시스템 UI와 여백을 맞추는 로직을 적용
-    }
-    
-    // 주소 선택 클릭 이벤트를 설정하는 메서드
-    private void setupGuideAreaNavigation() {
-        View guideAreaSearchBox = findViewById(R.id.guidearea_search_box);
-
-        guideAreaSearchBox.setOnClickListener(v -> {
-            Intent intent = new Intent(Wasteguide.this, Guidearea_select.class);
-            startActivity(intent);
-        });
     }
 
     // 하단 내비게이션 아이콘들의 클릭 이벤트를 설정하는 메서드
@@ -54,27 +40,26 @@ public class Wasteguide extends AppCompatActivity {
         ImageButton messageIcon = findViewById(R.id.message_icon);
         ImageButton accountIcon = findViewById(R.id.account_icon);
 
-
         homeIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(Wasteguide.this, MainscreenActivity.class);
+            Intent intent = new Intent(Guidearea_select.this, MainscreenActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
             finish();
         });
 
         mapIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(Wasteguide.this, LocationActivity.class);
+            Intent intent = new Intent(Guidearea_select.this, LocationActivity.class);
             startActivity(intent);
         });
 
         cameraIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(Wasteguide.this, CameraActivity.class);
+            Intent intent = new Intent(Guidearea_select.this, CameraActivity.class);
             startActivity(intent);
         });
 
 
         accountIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(Wasteguide.this, MypageActivity.class);
+            Intent intent = new Intent(Guidearea_select.this, MypageActivity.class);
             startActivity(intent);
         });
     }

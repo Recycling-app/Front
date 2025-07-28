@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -15,9 +16,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.recycling_app.BuildConfig;
+import com.example.recycling_app.Howtobox.Wasteguide;
 import com.example.recycling_app.LocationActivity;
 import com.example.recycling_app.MainscreenActivity;
 import com.example.recycling_app.MypageActivity;
@@ -51,7 +56,6 @@ public class Photo_Recognition extends AppCompatActivity {
     private ImageView resultImageView;
     private TextView resultTextView;
     private ProgressBar progressBar;
-
     private final List<Module> pytorchModules = new ArrayList<>();
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
@@ -61,14 +65,16 @@ public class Photo_Recognition extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // XML 레이아웃 파일에 하단 네비게이션 바가 포함되어 있어야 합니다.
-        setContentView(R.layout.photo_recognition_result);
+
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false); // Edge-to-Edge UI를 활성화
+        setContentView(R.layout.photo_recognition_result); // 레이아웃을 설정
 
         resultImageView = findViewById(R.id.resultImageView);
         resultTextView = findViewById(R.id.resultTextView);
         progressBar = findViewById(R.id.progressBar);
 
-        setupBottomNavigation();
+        setupBottomNavigation(); // 하단 내비게이션 아이콘들의 클릭 이벤트를 설정하는 메서드
+        applyWindowInsets(); // 시스템 UI와 여백을 맞추는 로직을 적용
 
         String imageUriString = getIntent().getStringExtra("imageUri");
         if (imageUriString == null) {
@@ -82,10 +88,11 @@ public class Photo_Recognition extends AppCompatActivity {
 
         progressBar.setVisibility(View.VISIBLE);
         resultTextView.setText("쓰레기를 인식하고 있습니다...");
-
         executorService.execute(() -> runAnalysis(imageUri));
+
     }
 
+    // 하단 내비게이션 아이콘들의 클릭 이벤트를 설정하는 메서드
     private void setupBottomNavigation() {
         ImageButton homeIcon = findViewById(R.id.home_icon);
         ImageButton mapIcon = findViewById(R.id.map_icon);
@@ -117,7 +124,36 @@ public class Photo_Recognition extends AppCompatActivity {
         });
     }
 
+    // 시스템 UI 여백 조절
+    private void applyWindowInsets() {
+        View main_header = findViewById(R.id.main_header);
+        View underbar = findViewById(R.id.underbar);
 
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (view, insets) -> {
+            // 시스템 바의 크기를 가져옵니다.
+            int topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
+            int bottomInset = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom;
+            int oneDp = (int) (getResources().getDisplayMetrics().density); // 1dp에 해당하는 픽셀 값
+
+            // 상단 헤더의 마진을 조절합니다.
+            if (main_header != null && main_header.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) main_header.getLayoutParams();
+                params.topMargin = topInset + oneDp;
+                main_header.setLayoutParams(params);
+            }
+
+            // 하단 바의 마진을 조절합니다.
+            if (underbar != null && underbar.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) underbar.getLayoutParams();
+                params.bottomMargin = bottomInset + oneDp;
+                underbar.setLayoutParams(params);
+            }
+
+            return WindowInsetsCompat.CONSUMED; // Insets을 소비했음을 시스템에 알립니다.
+        });
+    }
+
+    //학습 모델을 이용해서 쓰레기 인식
     private void runAnalysis(Uri localUri) {
         try {
             String classificationResult = runEnsembleInference(localUri);
@@ -137,6 +173,7 @@ public class Photo_Recognition extends AppCompatActivity {
         }
     }
 
+    // 인식한 쓰레기를 토대로 Gemini API 호출 및 답변
     private void askGemini(String topic) {
 
         GenerativeModel gm = new GenerativeModel("gemini-2.5-flash", BuildConfig.GEMINI_API_KEY);

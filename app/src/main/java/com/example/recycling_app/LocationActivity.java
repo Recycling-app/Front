@@ -2,6 +2,7 @@ package com.example.recycling_app;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -77,8 +78,6 @@ public class LocationActivity extends AppCompatActivity implements LocationAcces
     private CardView addressBox; // CardView 변수 선언
     private TextView markerAddressTextView;
     private IconsManager iconsManager;
-
-    // *** Firebase 변수 변경 (Realtime Database -> Cloud Firestore) ***
     private FirebaseFirestore db;
     private fetchDataFromFirestore dataFetcher;
 
@@ -159,9 +158,7 @@ public class LocationActivity extends AppCompatActivity implements LocationAcces
 
     @Override
     public void LocationOnPermissionGranted() {
-        Toast.makeText(this, "위치 권한이 승인되었습니다.", Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, "수거함 위치를 불러오는 중입니다...", Toast.LENGTH_SHORT).show();
-        startMap();
+        showInitialWarningDialog();
     }
 
     @Override
@@ -176,8 +173,50 @@ public class LocationActivity extends AppCompatActivity implements LocationAcces
         locationAccess.handleRequestPermissionsResult(requestCode, grantResults);
     }
 
+    private void showInitialWarningDialog() {
+        // 1. "app_prefs"라는 이름의 저장소에서 데이터를 불러옵니다.
+        SharedPreferences prefs = getSharedPreferences("app_prefs", MODE_PRIVATE);
+        // "has_seen_warning" 이라는 키의 값을 읽어옵니다. 저장된 값이 없으면 기본값 false를 사용합니다.
+        boolean hasSeenWarning = prefs.getBoolean("has_seen_warning", false);
+
+        // 2. 만약 이전에 경고창을 본 적이 있다면(값이 true라면),
+        if (hasSeenWarning) {
+            startMap(); // 바로 지도를 시작하고 메서드를 종료합니다.
+            return;
+        }
+
+        // --- 이 아래 코드는 최초 실행 시에만 실행됩니다 ---
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.warning_dialog, null);
+        Button confirmButton = dialogView.findViewById(R.id.info_close);
+
+        builder.setView(dialogView);
+        builder.setCancelable(false);
+
+        AlertDialog dialog = builder.create();
+
+        confirmButton.setOnClickListener(v -> {
+            dialog.dismiss();
+
+            // 3. '확인' 버튼을 누르면, "has_seen_warning" 값을 true로 저장합니다.
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("has_seen_warning", true);
+            editor.apply(); // 저장을 완료합니다.
+
+            // 이제 평소처럼 지도를 시작합니다.
+            startMap();
+        });
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+        dialog.show();
+    }
+
     // 지도 시작 (초기화)
     private void startMap() {
+        Toast.makeText(this, "위치 권한이 승인되었습니다.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "수거함 위치를 불러오는 중입니다...", Toast.LENGTH_SHORT).show();
         mapView.start(new MapLifeCycleCallback() {
             @Override
             public void onMapDestroy() {
@@ -206,6 +245,7 @@ public class LocationActivity extends AppCompatActivity implements LocationAcces
                     dataFetcher.fetchAllLocations(new fetchDataFromFirestore.OnDataReadyCallback() {
                         @Override
                         public void onDataReady(List<LocationData> locations) {
+
                             // 데이터 로딩 성공!
                             // 받아온 데이터를 MainActivity의 allLocations 리스트에 저장합니다.
                             LocationActivity.this.allLocations.clear();
