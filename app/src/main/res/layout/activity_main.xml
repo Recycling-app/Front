@@ -4,24 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#B5F8DB" tools:context=".MainActivity">
+    android:background="#B5F8DB"
+    tools:context=".MainActivity">
 
     <ImageView
-        android:id="@+id/main_logo"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_marginTop="80dp"
-        android:src="@drawable/recycling_app_icon2" android:contentDescription="메인 화면 로고"
+        android:id="@+id/app_logo"
+        android:layout_width="216dp"
+        android:layout_height="213dp"
+        android:layout_marginTop="70dp"
+        android:contentDescription="앱 로고"
+        android:src="@drawable/recycling_app_icon2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/layout_login_button_group"
+        android:id="@+id/layout_id_input"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginEnd="60dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
         android:layout_marginTop="40dp"
         android:orientation="horizontal"
         android:background="@drawable/rounded_edittext_background"
@@ -29,14 +32,14 @@
         android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_logo">
+        app:layout_constraintTop_toBottomOf="@+id/app_logo">
 
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="20dp"
-            android:src="@drawable/ic_globe"
-            android:contentDescription="로그인 아이콘" />
+            android:src="@drawable/ic_email"
+            android:contentDescription="이메일 아이콘" />
 
         <View
             android:layout_width="2dp"
@@ -46,39 +49,41 @@
             android:layout_marginStart="10dp"
             android:background="#B0B0B0" />
 
-        <Button
-            android:id="@+id/login_button"
-            android:layout_width="0dp"
+        <EditText
+            android:id="@+id/edit_text_id"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:text="Login"
-            android:textColor="#83827A"
-            android:textSize="15sp"
-            android:textAlignment="viewStart"
+            android:hint="아이디 (이메일)"
             android:paddingStart="10dp"
             android:paddingEnd="20dp"
-            android:stateListAnimator="@null" /> </LinearLayout>
+            android:textColor="#A7A7A7"
+            android:textColorHint="#A0A0A0"
+            android:textSize="16sp"
+            android:inputType="textEmailAddress" />
+    </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layout_google_login_button_group"
+        android:id="@+id/layout_password_input"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginEnd="60dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
         android:background="@drawable/rounded_edittext_background"
         android:gravity="center_vertical"
         android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_login_button_group"> <ImageView
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="20dp"
-        android:src="@drawable/ic_google"
-        android:contentDescription="구글 로그인 아이콘" />
+        app:layout_constraintTop_toBottomOf="@+id/layout_id_input">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="20dp"
+            android:src="@drawable/ic_lock"
+            android:contentDescription="비밀번호 아이콘" />
 
         <View
             android:layout_width="2dp"
@@ -88,59 +93,67 @@
             android:layout_marginStart="10dp"
             android:background="#B0B0B0" />
 
-        <Button
-            android:id="@+id/google_login_button"
-            android:layout_width="0dp"
+        <EditText
+            android:id="@+id/edit_text_password"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:text="Sign in with Google"
-            android:textColor="#83827A"
-            android:textSize="15sp"
-            android:textAlignment="viewStart"
+            android:hint="비밀번호"
             android:paddingStart="10dp"
             android:paddingEnd="20dp"
-            android:stateListAnimator="@null" /> </LinearLayout>
+            android:textColor="#A7A7A7"
+            android:textColorHint="#A0A0A0"
+            android:textSize="16sp"
+            android:inputType="textPassword" />
+    </LinearLayout>
 
-    <LinearLayout
+    <Button
+        android:id="@+id/login_button"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginEnd="60dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
         android:layout_marginTop="30dp"
-        android:orientation="horizontal"
-        android:gravity="center"
+        android:backgroundTint="#F0E68C"
+        android:text="로그인"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:cornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_google_login_button_group"> <TextView
-        android:id="@+id/signup_text"
+        app:layout_constraintTop_toBottomOf="@+id/layout_password_input" />
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/rounded_background"
-        android:clickable="true"
-        android:focusable="true"
-        android:paddingStart="15dp"
-        android:paddingTop="8dp"
-        android:paddingEnd="15dp"
-        android:paddingBottom="8dp"
-        android:text="회원가입"
-        android:textColor="#000000"
-        android:textSize="15sp" />
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_button">
+        <!-- Google 로그인 버튼 제거로 인한 제약 조건 변경: login_button 아래로 바로 연결 -->
+
+        <TextView
+            android:id="@+id/signup_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="회원가입"
+            android:textColor="#000000"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/find_info_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="15dp"
+            android:clickable="true"
+            android:focusable="true"
             android:text="아이디 및 비밀번호 찾기"
             android:textColor="#000000"
-            android:textSize="15sp"
-            android:background="@drawable/rounded_background" android:paddingStart="15dp"
-            android:paddingEnd="15dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:clickable="true"
-            android:focusable="true" />
+            android:textSize="16sp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
