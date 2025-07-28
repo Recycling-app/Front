@@ -6,10 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context=".Camera_recognition.Photo_Recognition"
-    android:paddingBottom="45dp">
+    tools:context=".Camera_recognition.Photo_Recognition">
 
-    <!-- 상단바 -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/topBar"
         android:layout_width="0dp"
@@ -19,7 +17,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- 상단바 메시지 -->
         <TextView
             android:id="@+id/toolbar_title"
             android:layout_width="wrap_content"
@@ -33,7 +30,6 @@
             android:paddingBottom="10dp"/>
     </com.google.android.material.appbar.MaterialToolbar>
 
-    <!-- 찍은 사진 -->
     <ImageView
         android:id="@+id/resultImageView"
         android:layout_width="0dp"
@@ -45,7 +41,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:src="@tools:sample/backgrounds/scenic" />
 
-    <!-- 결과창 -->
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="0dp"
@@ -56,39 +51,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/camera_box_1_alpha_background">
 
-            <!-- 반투명 배경 -->
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/camera_box_1"
-                android:scaleType="centerCrop"
-                android:alpha="0.4" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-            <!-- 결과 출력 -->
-                <TextView
-                    android:id="@+id/resultTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:padding="16dp"
-                    android:textColor="@android:color/black"
-                    android:fontFamily="@font/nanumgothicextrabold"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </FrameLayout>
+            <TextView
+            android:id="@+id/resultTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:padding="16dp"
+            android:textColor="@android:color/black"
+            android:fontFamily="@font/nanumgothicextrabold"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        </LinearLayout>
     </ScrollView>
 
-    <!-- 진행 표시 -->
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
@@ -100,7 +81,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:visibility="visible"/>
 
-    <!-- 언더바와 아이콘 -->
     <ImageView
         android:id="@+id/underbar"
         android:layout_width="0dp"
@@ -110,7 +90,6 @@
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/underbar" />
 
@@ -118,43 +97,43 @@
         android:id="@+id/home_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/home_icon"
+        android:src="@drawable/home_icon"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="홈"
-        android:elevation="8dp"
+        android:elevation="9dp"
         app:layout_constraintTop_toTopOf="@+id/underbar"
         app:layout_constraintBottom_toBottomOf="@+id/underbar"
         app:layout_constraintStart_toStartOf="@+id/underbar"
         app:layout_constraintEnd_toEndOf="@+id/underbar"
-        app:layout_constraintHorizontal_bias="0.1"
-        />
+        app:layout_constraintHorizontal_bias="0.1"/>
 
     <ImageButton
         android:id="@+id/map_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/map_icon"
+        android:src="@drawable/map_icon"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="지도"
-        android:elevation="8dp"
+        android:elevation="9dp"
         app:layout_constraintTop_toTopOf="@+id/underbar"
         app:layout_constraintBottom_toBottomOf="@+id/underbar"
         app:layout_constraintStart_toStartOf="@+id/underbar"
         app:layout_constraintEnd_toEndOf="@+id/underbar"
-        app:layout_constraintHorizontal_bias="0.3"
-        />
+        app:layout_constraintHorizontal_bias="0.3"/>
 
     <ImageButton
         android:id="@+id/camera_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/camera_icon_green"
+        android:src="@drawable/camera_icon_green"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="카메라"
-        android:elevation="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:elevation="9dp"
         app:layout_constraintTop_toTopOf="@+id/underbar"
+        app:layout_constraintBottom_toBottomOf="@+id/underbar"
         app:layout_constraintStart_toStartOf="@+id/underbar"
         app:layout_constraintEnd_toEndOf="@+id/underbar"
-        app:layout_constraintHorizontal_bias="0.5"
-        />
+        app:layout_constraintHorizontal_bias="0.5"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -172,27 +151,27 @@
         android:id="@+id/message_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/message_icon"
+        android:src="@drawable/message_icon"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="커뮤니티"
-        android:elevation="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:elevation="9dp"
         app:layout_constraintTop_toTopOf="@+id/underbar"
+        app:layout_constraintBottom_toBottomOf="@+id/underbar"
         app:layout_constraintStart_toStartOf="@+id/underbar"
         app:layout_constraintEnd_toEndOf="@+id/underbar"
-        app:layout_constraintHorizontal_bias="0.7"
-        />
+        app:layout_constraintHorizontal_bias="0.7"/>
 
     <ImageButton
         android:id="@+id/account_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/account_icon"
+        android:src="@drawable/account_icon"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="마이페이지"
-        android:elevation="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:elevation="9dp"
         app:layout_constraintTop_toTopOf="@+id/underbar"
+        app:layout_constraintBottom_toBottomOf="@+id/underbar"
         app:layout_constraintStart_toStartOf="@+id/underbar"
         app:layout_constraintEnd_toEndOf="@+id/underbar"
-        app:layout_constraintHorizontal_bias="0.9"
-        />
+        app:layout_constraintHorizontal_bias="0.9"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
