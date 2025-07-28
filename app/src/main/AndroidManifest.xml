@@ -19,6 +19,7 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_appicon"
         android:label="@string/app_name"
+        android:usesCleartextTraffic="true"  tools:targetApi="31"
         android:roundIcon="@mipmap/ic_launcher_foreground"
         android:supportsRtl="true"
         android:theme="@style/Theme.Recycling_app"
@@ -31,7 +32,7 @@
             android:value="f74b1223cc505a613aeb568c3277ff52" />
 
         <activity
-            android:name=".MainscreenActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Recycling_app">
@@ -41,6 +42,19 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".MainscreenActivity"
+            android:exported="false" android:label="@string/app_name"
+            android:theme="@style/Theme.Recycling_app">
+        </activity>
+
+        <activity android:name=".Camera_recognition.CameraActivity" android:exported="false" />
+        <activity android:name=".Camera_recognition.Photo_Recognition" android:exported="false" />
+        <activity android:name=".LocationActivity" android:exported="false" />
+        <activity android:name=".SignupActivity" android:exported="false" />
+        <activity android:name=".AdditionalInfoActivity" android:exported="false" />
+        <activity android:name=".LoginActivity" android:exported="false" />
+        <activity android:name=".FindInfoActivity" android:exported="false" />
         <activity android:name=".Camera_recognition.CameraActivity" />
         <activity android:name=".Camera_recognition.Photo_Recognition" />
         <activity android:name=".LocationActivity" />
