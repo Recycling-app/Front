@@ -61,9 +61,6 @@ public class MainscreenActivity extends AppCompatActivity {
             return WindowInsetsCompat.CONSUMED; // Insets을 소비했음을 시스템에 알립니다.
         });
 
-
-
-
         // 카메라 이동
         camerabox.setOnClickListener(new View.OnClickListener() {
             @Override
