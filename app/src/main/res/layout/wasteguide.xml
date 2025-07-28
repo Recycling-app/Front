@@ -51,6 +51,20 @@
 
     <!-- 언더바와 아이콘 -->
     <ImageView
+        android:id="@+id/main_header"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:src="@drawable/how_to_recycle"
+        android:adjustViewBounds="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/recycle_box_image"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_marginTop="30dp" />
+
+
+    <ImageView
         android:id="@+id/underbar"
         android:layout_width="0dp"
         android:layout_height="70dp"
@@ -60,71 +74,75 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="50dp"
         android:elevation="4dp"/>
 
     <ImageButton
         android:id="@+id/home_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/home_icon"
+        android:src="@drawable/home_icon"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="홈"
         app:layout_constraintTop_toTopOf="@+id/underbar"
         app:layout_constraintBottom_toBottomOf="@+id/underbar"
         app:layout_constraintStart_toStartOf="@+id/underbar"
         app:layout_constraintEnd_toEndOf="@+id/underbar"
         app:layout_constraintHorizontal_bias="0.1"
-        android:elevation="4dp" />
+        android:elevation="5dp" />
 
     <ImageButton
         android:id="@+id/map_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/map_icon"
+        android:src="@drawable/map_icon"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="지도"
         app:layout_constraintTop_toTopOf="@+id/underbar"
         app:layout_constraintBottom_toBottomOf="@+id/underbar"
         app:layout_constraintStart_toStartOf="@+id/underbar"
         app:layout_constraintEnd_toEndOf="@+id/underbar"
         app:layout_constraintHorizontal_bias="0.3"
-        android:elevation="4dp" />
+        android:elevation="5dp" />
 
     <ImageButton
         android:id="@+id/camera_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/camera_icon"
+        android:src="@drawable/camera_icon"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="카메라"
         app:layout_constraintTop_toTopOf="@+id/underbar"
         app:layout_constraintBottom_toBottomOf="@+id/underbar"
         app:layout_constraintStart_toStartOf="@+id/underbar"
         app:layout_constraintEnd_toEndOf="@+id/underbar"
         app:layout_constraintHorizontal_bias="0.5"
-        android:elevation="4dp" />
+        android:elevation="5dp" />
 
     <ImageButton
         android:id="@+id/message_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/message_icon"
+        android:src="@drawable/message_icon"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="커뮤니티"
         app:layout_constraintTop_toTopOf="@+id/underbar"
         app:layout_constraintBottom_toBottomOf="@+id/underbar"
         app:layout_constraintStart_toStartOf="@+id/underbar"
         app:layout_constraintEnd_toEndOf="@+id/underbar"
         app:layout_constraintHorizontal_bias="0.7"
-        android:elevation="4dp" />
+        android:elevation="5dp" />
 
     <ImageButton
         android:id="@+id/account_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/account_icon"
+        android:src="@drawable/account_icon"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="마이페이지"
         app:layout_constraintTop_toTopOf="@+id/underbar"
         app:layout_constraintBottom_toBottomOf="@+id/underbar"
         app:layout_constraintStart_toStartOf="@+id/underbar"
         app:layout_constraintEnd_toEndOf="@+id/underbar"
         app:layout_constraintHorizontal_bias="0.9"
-        android:elevation="4dp" />
+        android:elevation="5dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
