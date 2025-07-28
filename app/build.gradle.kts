@@ -4,9 +4,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    // ⭐ Firebase Google Services 플러그인 적용을 여기에 추가합니다.
-    // 이 플러그인은 google-services.json 파일을 읽고 Firebase 설정을 빌드 프로세스에 주입합니다.
-    id("com.google.gms.google-services") // 버전 명시 없이 ID만 사용
+    // Firebase Google Services 플러그인 적용
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -60,14 +59,10 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
 
-    // ⭐ Firebase BoM (Bill of Materials) 사용 권장
-    // BOM을 사용하면 모든 Firebase 라이브러리의 버전을 한 곳에서 관리할 수 있어 편리합니다.
-    // libs.versions.toml에 정의된 경우 platform(libs.firebase.bom)으로 사용 가능
-    implementation(platform("com.google.firebase:firebase-bom:32.0.0")) // 최신 BOM 버전을 확인하고 사용하세요 (예: 32.0.0)
+    // Firebase BoM (Bill of Materials) 사용 권장
+    implementation(platform("com.google.firebase:firebase-bom:32.0.0"))
 
-    // ⭐ Firebase 인증 (FirebaseAuth) 라이브러리
-    // libs.firebase.auth와 중복되므로, libs.versions.toml을 사용하고 있다면 아래 직접 선언은 제거하세요.
-    // 만약 libs.versions.toml에 22.0.0으로 정의되어 있다면 그대로 두거나, BOM을 따르도록 변경할 수 있습니다.
+    // Firebase 인증 (FirebaseAuth) 라이브러리
     implementation("com.google.firebase:firebase-auth") // BOM 사용 시 버전 명시 불필요
 
     testImplementation(libs.junit)
