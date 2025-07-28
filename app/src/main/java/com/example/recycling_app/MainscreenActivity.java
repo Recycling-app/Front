@@ -14,6 +14,9 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.recycling_app.Camera_recognition.CameraActivity;
 
+import com.example.recycling_app.Commuity.Commuity;
+import com.example.recycling_app.Howtobox.Wasteguide;
+
 public class MainscreenActivity extends AppCompatActivity {
 
     @Override
@@ -58,9 +61,6 @@ public class MainscreenActivity extends AppCompatActivity {
             return WindowInsetsCompat.CONSUMED; // Insets을 소비했음을 시스템에 알립니다.
         });
 
-
-
-
         // 카메라 이동
         camerabox.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,14 +96,11 @@ public class MainscreenActivity extends AppCompatActivity {
             }
         });
 
-
-        /*      <!-- Acitvity 미정 -->
-
         // 재활용 방법 이동
         howtobox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainscreenActivity.this, Activity.class);
+                Intent intent = new Intent(MainscreenActivity.this, Wasteguide.class);
                 startActivity(intent);
             }
         });
@@ -113,7 +110,7 @@ public class MainscreenActivity extends AppCompatActivity {
         communitybox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainscreenActivity.this, Activity.class);
+                Intent intent = new Intent(MainscreenActivity.this, Commuity.class);
                 startActivity(intent);
             }
         });
@@ -121,12 +118,10 @@ public class MainscreenActivity extends AppCompatActivity {
         messageicon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainscreenActivity.this, Activity.class);
+                Intent intent = new Intent(MainscreenActivity.this, Commuity.class);
                 startActivity(intent);
             }
         });
-
-         */
 
 
         // 마이페이지 이동
@@ -139,5 +134,4 @@ public class MainscreenActivity extends AppCompatActivity {
         });
 
     }
-
 }

@@ -55,6 +55,12 @@
         <activity android:name=".AdditionalInfoActivity" android:exported="false" />
         <activity android:name=".LoginActivity" android:exported="false" />
         <activity android:name=".FindInfoActivity" android:exported="false" />
+        <activity android:name=".Camera_recognition.CameraActivity" />
+        <activity android:name=".Camera_recognition.Photo_Recognition" />
+        <activity android:name=".LocationActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".Howtobox.Wasteguide" />
+        <activity android:name=".Howtobox.Guidearea_select" />
 
         <!-- 내용이 없어서 활성화하면 에러남 <activity android:name=".MypageActivity" />
         <activity android:name=".SettingActivity" /> -->

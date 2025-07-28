@@ -14,8 +14,24 @@ if (localPropertiesFile.exists()) {
 }
 
 android {
+
     namespace = "com.example.recycling_app"
     compileSdk = 36
+
+    signingConfigs {
+        create("release") {
+            storeFile = file(property("MYAPP_RELEASE_STORE_FILE") as String)
+            storePassword = property("MYAPP_RELEASE_STORE_PASSWORD") as String
+            keyAlias = property("MYAPP_RELEASE_KEY_ALIAS") as String
+            keyPassword = property("MYAPP_RELEASE_KEY_PASSWORD") as String
+        }
+    }
+
+    buildTypes {
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
 
     defaultConfig {
         applicationId = "com.example.recycling_app"
