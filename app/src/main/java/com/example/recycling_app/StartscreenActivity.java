@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.recycling_app.Account.FindInfoActivity;
+import com.example.recycling_app.Account.LoginActivity;
 import com.example.recycling_app.Account.SignupActivity;
 import com.example.recycling_app.api.ApiService;
 import com.example.recycling_app.Network.RetrofitClient;
@@ -49,7 +50,7 @@ public class StartscreenActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(StartscreenActivity.this, com.example.recycling_app.Account.LoginActivity.class);
+                Intent intent = new Intent(StartscreenActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });
@@ -79,16 +80,6 @@ public class StartscreenActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-//         TedPermission.with(getApplicationContext())
-//                 .setPermissionListener(permissionListener)
-//                 .setRationaleMessage("카메라 권한이 필요합니다.")
-//                 .setDeniedMessage("거부하셨습니다.")
-//                 .setPermissions(Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.CAMERA)
-//                 .check();
-
-        Intent intent = new Intent(StartscreenActivity.this, MainscreenActivity.class);
-        startActivity(intent);
-        finish();
     };
 }
 

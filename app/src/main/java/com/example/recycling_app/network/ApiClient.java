@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
     // 백엔드 서버의 기본 URL
     // Android 에뮬레이터에서 '10.0.2.2'는 에뮬레이터가 실행되는 호스트 PC의 로컬호스트를 가리킴.
-    private static final String BASE_URL = "http://192.168.123.109:8080";
+    private static final String BASE_URL = "http://10.0.2.2:8080/";
     // Retrofit 객체 인스턴스. 앱 전체에서 단일 인스턴스를 재사용하기 위해 static으로 선언
     private static Retrofit retrofit;
 

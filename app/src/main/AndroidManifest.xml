@@ -73,13 +73,13 @@
         <activity
             android:name=".Account.FindInfoActivity" android:exported="false" />
         <activity
-            android:name=".MainscreenActivity" />
+            android:name=".MainscreenActivity" android:exported="false" />
         <activity
-            android:name=".Howtobox.Wasteguide" />
+            android:name=".Howtobox.Wasteguide" android:exported="false" />
         <activity
-            android:name=".Howtobox.Guidearea_select" />
+            android:name=".Howtobox.Guidearea_select" android:exported="false" />
         <activity
-            android:name=".Profile.MypageActivity" />
+            android:name=".Profile.MypageActivity" android:exported="false" />
         <activity
             android:name=".Profile.customerservice.MyInquiriesActivity" android:exported="false" />
         <activity
@@ -99,7 +99,7 @@
         <activity
             android:name=".Profile.mysetting.CustomGalleryActivity" android:exported="false" />
         <activity
-            android:name=".Profile.profieedit.ProfileActivity" android:exported="true" />
+            android:name=".Profile.profieedit.ProfileActivity" android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
