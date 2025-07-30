@@ -31,6 +31,11 @@ android {
 
     buildTypes {
         getByName("release") {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
             signingConfig = signingConfigs.getByName("release")
         }
     }
@@ -43,16 +48,6 @@ android {
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "GEMINI_API_KEY", "\"${localProperties["GEMINI_API_KEY"]}\"")
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -109,8 +104,8 @@ dependencies {
     implementation(libs.androidx.exifinterface)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    // Firebase BoM (Bill of Materials) 사용 권장
-    implementation(platform("com.google.firebase:firebase-bom:32.0.0"))
+    implementation(platform("com.google.firebase:firebase-bom:32.0.0")) // Firebase BoM (Bill of Materials) 사용 권장
+
     // Firebase 인증 (FirebaseAuth) 라이브러리
     implementation("com.google.firebase:firebase-auth") // BOM 사용 시 버전 명시 불필요
     implementation(libs.firebase.firestore)
@@ -127,12 +122,27 @@ dependencies {
     // Retrofit 및 GSON 의존성
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
     // OkHttp 로깅 인터셉터 (네트워크 요청 로깅용)
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
 
     // CircleImageView 라이브러리
     implementation("de.hdodenhof:circleimageview:3.1.0")
+
     // Glide 라이브러리 (이미지 로딩 및 표시용)
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
+}
+
+//.apk 자동 삭제 코드
+afterEvaluate {
+    tasks.matching { it.name.startsWith("assemble") }.configureEach {
+        doLast {
+            val apkDir = file("$buildDir/outputs/apk")
+            if (apkDir.exists()) {
+                apkDir.deleteRecursively()
+                println("APK 파일이 자동으로 삭제되었습니다: $apkDir")
+            }
+        }
+    }
 }

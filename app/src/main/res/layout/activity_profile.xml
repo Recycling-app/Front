@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F0F8FF"
-    tools:context=".ProfileActivity">
+    tools:context=".Profile.profieedit.ProfileActivity">
 
     <!-- 상단 초록색 배경 영역 -->
 
@@ -278,57 +278,103 @@
     </LinearLayout>
 </FrameLayout>
 
-    <!-- 하단 내비게이션 바 -->
-<LinearLayout
-android:id="@+id/bottom_navigation_bar"
-android:layout_width="0dp"
-android:layout_height="60dp"
-android:orientation="horizontal"
-android:background="#FFFFFF"
-android:gravity="center_vertical"
-android:paddingHorizontal="16dp"
-app:layout_constraintBottom_toBottomOf="parent"
-app:layout_constraintStart_toStartOf="parent"
-app:layout_constraintEnd_toEndOf="parent">
+    <!-- 언더 바 아이콘 -->
 
-<!-- 각 아이템 -->
-<ImageView
-    android:layout_width="0dp"
-    android:layout_height="34dp"
-    android:layout_weight="1"
-    android:src="@drawable/ic_home_outline_black_24dp"
-    app:tint="#888888" />
-<ImageView
-    android:layout_width="0dp"
-    android:layout_height="30dp"
-    android:layout_weight="1"
-    android:src="@drawable/ic_location_on_outline_black_24dp"
-    app:tint="#888888" />
-<ImageView
-    android:layout_width="0dp"
-    android:layout_height="34dp"
-    android:layout_weight="1"
-    android:src="@drawable/ic_camera_alt_outline_black_24dp"
-    app:tint="#888888" />
-<ImageView
-    android:layout_width="0dp"
-    android:layout_height="32dp"
-    android:layout_weight="1"
-    android:src="@drawable/ic_chat_bubble_outline_black_24dp"
-    app:tint="#888888" />
-<FrameLayout
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_weight="1"
-    android:gravity="center">
     <ImageView
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:src="@drawable/ic_person_outline_black_24dp"
-        app:tint="#83FFC9"
-        android:layout_gravity="center" />
-</FrameLayout>
+        android:id="@+id/underbar"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:contentDescription="언더바"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/underbar"
 
-</LinearLayout>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageButton
+        android:id="@+id/home_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/home_icon"
+        android:contentDescription="홈"
+
+        app:layout_constraintTop_toTopOf="@+id/underbar"
+        app:layout_constraintBottom_toBottomOf="@+id/underbar"
+        app:layout_constraintStart_toStartOf="@+id/underbar"
+        app:layout_constraintEnd_toEndOf="@+id/underbar"
+        app:layout_constraintHorizontal_bias="0.1"
+        />
+
+    <ImageButton
+        android:id="@+id/map_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/map_icon"
+        android:contentDescription="지도"
+
+        app:layout_constraintTop_toTopOf="@+id/underbar"
+        app:layout_constraintBottom_toBottomOf="@+id/underbar"
+        app:layout_constraintStart_toStartOf="@+id/underbar"
+        app:layout_constraintEnd_toEndOf="@+id/underbar"
+        app:layout_constraintHorizontal_bias="0.3"
+        />
+
+    <ImageButton
+        android:id="@+id/camera_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/camera_icon"
+        android:contentDescription="카메라"
+
+        app:layout_constraintTop_toTopOf="@+id/underbar"
+        app:layout_constraintBottom_toBottomOf="@+id/underbar"
+        app:layout_constraintStart_toStartOf="@+id/underbar"
+        app:layout_constraintEnd_toEndOf="@+id/underbar"
+        app:layout_constraintHorizontal_bias="0.5"
+        />
+
+    <ImageButton
+        android:id="@+id/message_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/message_icon"
+        android:contentDescription="커뮤니티"
+
+        app:layout_constraintTop_toTopOf="@+id/underbar"
+        app:layout_constraintBottom_toBottomOf="@+id/underbar"
+        app:layout_constraintStart_toStartOf="@+id/underbar"
+        app:layout_constraintEnd_toEndOf="@+id/underbar"
+        app:layout_constraintHorizontal_bias="0.7"
+        />
+
+    <ImageButton
+        android:id="@+id/account_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/account_icon_green"
+        android:contentDescription="마이페이지"
+
+        app:layout_constraintTop_toTopOf="@+id/underbar"
+        app:layout_constraintBottom_toBottomOf="@+id/underbar"
+        app:layout_constraintStart_toStartOf="@+id/underbar"
+        app:layout_constraintEnd_toEndOf="@+id/underbar"
+        app:layout_constraintHorizontal_bias="0.9"
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+
+        android:layout_marginTop="40dp"
+        android:contentDescription="프로필 아이콘 밑에 초록색 원"
+
+        app:layout_constraintStart_toStartOf="@+id/account_icon"
+
+        app:layout_constraintTop_toTopOf="@+id/account_icon"
+        app:srcCompat="@drawable/green_dot"
+        tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

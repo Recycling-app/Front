@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F0F8FF"
-    tools:context=".SubmitInquiryActivity">
+    tools:context=".Profile.customerservice.SubmitInquiryActivity">
 
     <View
         android:id="@+id/top_background_view"

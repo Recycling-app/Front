@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F0F8FF"
-    tools:context=".CustomerSupportActivity">
+    tools:context=".Profile.customerservice.CustomerSupportActivity">
 
     <!-- 상단 초록색 배경 영역 -->
     <View

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
@@ -15,13 +14,10 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.recycling_app.Camera_recognition.CameraActivity;
-import com.example.recycling_app.Camera_recognition.Photo_Recognition;
-import com.example.recycling_app.Commuity.Commuity;
-import com.example.recycling_app.LocationActivity;
+import com.example.recycling_app.Location.LocationActivity;
 import com.example.recycling_app.MainscreenActivity;
-import com.example.recycling_app.MypageActivity;
+import com.example.recycling_app.Profile.MypageActivity;
 import com.example.recycling_app.R;
-import com.example.recycling_app.Howtobox.Guidearea_select;
 
 public class Wasteguide extends AppCompatActivity {
 

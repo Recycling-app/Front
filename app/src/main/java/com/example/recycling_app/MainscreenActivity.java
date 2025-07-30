@@ -16,6 +16,8 @@ import com.example.recycling_app.Camera_recognition.CameraActivity;
 
 import com.example.recycling_app.Commuity.Commuity;
 import com.example.recycling_app.Howtobox.Wasteguide;
+import com.example.recycling_app.Location.LocationActivity;
+import com.example.recycling_app.Profile.MypageActivity;
 
 public class MainscreenActivity extends AppCompatActivity {
 

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#B5F8DB"
-    tools:context=".MainActivity">
+    tools:context=".MainscreenActivity">
 
     <ImageView
         android:id="@+id/main_header"
@@ -17,7 +17,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-
         android:contentDescription="배경사진"/>
 
     <ImageButton
@@ -171,15 +170,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="14dp"
-
         android:layout_marginTop="40dp"
         android:contentDescription="홈 아이콘 밑에 초록색 원"
-
         app:layout_constraintStart_toStartOf="@+id/home_icon"
-
         app:layout_constraintTop_toTopOf="@+id/home_icon"
         app:srcCompat="@drawable/green_dot"
         tools:ignore="MissingConstraints" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

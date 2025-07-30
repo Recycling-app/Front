@@ -10,18 +10,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout; // LinearLayout 추가
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.recycling_app.LoginActivity; // LoginActivity import
+import com.example.recycling_app.Account.LoginActivity; // LoginActivity import
 import com.example.recycling_app.R;
 import com.example.recycling_app.api.ApiService;
 import com.example.recycling_app.dto.ResetPasswordRequest;
-import com.example.recycling_app.network.RetrofitClient;
+import com.example.recycling_app.Network.RetrofitClient;
 
 import retrofit2.Call;
 import retrofit2.Callback;

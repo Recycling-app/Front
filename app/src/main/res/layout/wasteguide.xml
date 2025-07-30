@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E0F7FA"
-    tools:context=".MainActivity">
+    tools:context=".StartscreenActivity">
 
     <TextView
         android:id="@+id/guidearea_search_box"
@@ -66,19 +66,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recycle_box_image" />
 
+
+    <!-- 언더바와 아이콘 -->
     <TextView
         android:id="@+id/wasteguide_result_answer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/nanumgothicextrabold"
+        android:paddingBottom="10dp"
         android:text="지역별 가이드 결과"
         android:textColor="@android:color/black"
-        android:fontFamily="@font/nanumgothicextrabold"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:paddingBottom="10dp"/>
+        tools:layout_editor_absoluteX="113dp"
+        tools:layout_editor_absoluteY="324dp" />
 
-
-    <!-- 언더바와 아이콘 -->
     <ImageView
         android:id="@+id/main_header"
         android:layout_width="wrap_content"

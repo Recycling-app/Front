@@ -85,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "로그인 성공!", Toast.LENGTH_LONG).show();
                     Log.d(TAG, "로그인 성공: Access Token = " + accessToken);
 
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, MainscreenActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     finish(); // 로그인 Activity 종료

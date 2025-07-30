@@ -22,10 +22,9 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.recycling_app.BuildConfig;
-import com.example.recycling_app.Howtobox.Wasteguide;
-import com.example.recycling_app.LocationActivity;
+import com.example.recycling_app.Location.LocationActivity;
 import com.example.recycling_app.MainscreenActivity;
-import com.example.recycling_app.MypageActivity;
+import com.example.recycling_app.Profile.MypageActivity;
 import com.example.recycling_app.R;
 import com.google.ai.client.generativeai.GenerativeModel;
 import com.google.ai.client.generativeai.java.GenerativeModelFutures;

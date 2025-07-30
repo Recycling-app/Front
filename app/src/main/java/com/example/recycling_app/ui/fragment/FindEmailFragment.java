@@ -18,12 +18,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction; // FragmentTransaction 추가
 
-import com.example.recycling_app.LoginActivity; // LoginActivity import
+import com.example.recycling_app.Account.LoginActivity; // LoginActivity import
 import com.example.recycling_app.R;
 import com.example.recycling_app.api.ApiService;
 import com.example.recycling_app.dto.FindEmailRequest;
 import com.example.recycling_app.dto.FindEmailResponse;
-import com.example.recycling_app.network.RetrofitClient;
+import com.example.recycling_app.Network.RetrofitClient;
 
 import retrofit2.Call;
 import retrofit2.Callback;

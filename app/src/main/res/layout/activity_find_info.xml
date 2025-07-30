@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#B5F8DB"
-    tools:context=".FindInfoActivity">
+    tools:context=".Account.FindInfoActivity">
 
     <TextView
         android:id="@+id/title_find_info"

@@ -1,6 +1,6 @@
 package com.example.recycling_app.service;
 
-import com.example.recycling_app.InquiryItem; // 문의 항목 데이터 모델 DTO
+import com.example.recycling_app.Profile.customerservice.InquiryItem; // 문의 항목 데이터 모델 DTO
 import java.util.List;                       // List 컬렉션
 import retrofit2.Call;                       // Retrofit 비동기 통신 객체
 import retrofit2.http.GET;                   // HTTP GET 요청 정의 어노테이션
