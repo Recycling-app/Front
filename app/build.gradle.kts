@@ -1,10 +1,12 @@
+// build.gradle.kts (:app 모듈, app 폴더 안)
 import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id ("com.google.gms.google-services")
+    // Firebase Google Services 플러그인 적용
+    id("com.google.gms.google-services")
 }
 
 val localProperties = Properties()
@@ -16,7 +18,7 @@ if (localPropertiesFile.exists()) {
 android {
 
     namespace = "com.example.recycling_app"
-    compileSdk = 36
+    compileSdk = 36 // 현재 설정 유지
 
     signingConfigs {
         create("release") {
@@ -105,6 +107,12 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.exifinterface)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
+    // Firebase BoM (Bill of Materials) 사용 권장
+    implementation(platform("com.google.firebase:firebase-bom:32.0.0"))
+    // Firebase 인증 (FirebaseAuth) 라이브러리
+    implementation("com.google.firebase:firebase-auth") // BOM 사용 시 버전 명시 불필요
     implementation(libs.firebase.firestore)
     implementation(libs.androidx.media3.common)
     implementation(libs.play.services.location)
@@ -115,4 +123,16 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Retrofit 및 GSON 의존성
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    // OkHttp 로깅 인터셉터 (네트워크 요청 로깅용)
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
+
+    // CircleImageView 라이브러리
+    implementation("de.hdodenhof:circleimageview:3.1.0")
+    // Glide 라이브러리 (이미지 로딩 및 표시용)
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 }

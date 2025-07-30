@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
-    <!--Permission-->
+  
+  <!--Permission-->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/> <!--  이미지 파일 접근 권한 -->
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/> <!--  이미지 파일 접근 권한 -->
     <uses-permission android:name="android.permission.CAMERA"/> <!-- 카메라 사용 권한-->
@@ -12,9 +15,11 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 위치 -->
     <uses-feature android:name="android.hardware.camera" android:required="false" /> <!-- 카메라 하드웨어가 없어도 앱 동작 가능 -->
     <uses-feature android:name="android.hardware.screen.portrait" android:required="false" /> <!-- 세로 모드 기능-->
+    <uses-feature android:name="android.hardware.camera.flash" android:required="false" /> <!-- 카메라 플래쉬 없어도 앱 동작 가능 -->
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" /> <!-- 자동초점 없어도 앱 동작 가능 -->
 
     <application
-        android:allowBackup="true"
+        android:name=".MyApplication"  android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_appicon"
@@ -22,31 +27,71 @@
         android:usesCleartextTraffic="true"  tools:targetApi="31"
         android:roundIcon="@mipmap/ic_launcher_foreground"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Recycling_app"
-        tools:ignore="ExtraText">
+        android:theme="@style/Theme.Recycling_App"
+        android:usesCleartextTraffic="true" tools:ignore="ExtraText"
         tools:replace="android:appComponentFactory"
         android:appComponentFactory="whateverString">
 
         <meta-data
             android:name="com.kakao.vectormap.AppKey"
             android:value="f74b1223cc505a613aeb568c3277ff52" />
-
         <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.Recycling_app">
+            android:name=".MyInquiriesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SubmitInquiryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FaqActivity"
+            android:exported="false" />
+        <activity
+            android:name=".InquiryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AccountDeletionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AiRecognitionHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PasswordEditActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PersonalInfoEditActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CustomGalleryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+      
         <activity
-            android:name=".MainscreenActivity"
-            android:exported="false" android:label="@string/app_name"
-            android:theme="@style/Theme.Recycling_app">
-        </activity>
+            android:name=".MainActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Recycling_App" />
+      
+        <activity
+            android:name=".CustomerSupportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UsageHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AccountManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileEditActivity"
+            android:exported="false" />
 
         <activity android:name=".Camera_recognition.CameraActivity" android:exported="false" />
         <activity android:name=".Camera_recognition.Photo_Recognition" android:exported="false" />
@@ -67,16 +112,14 @@
 
 
         <provider
-            android:authorities="com.example.practice11"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.practice11"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/cammeraaccess"/>
+                android:resource="@xml/cammeraaccess" />
         </provider>
-
-
     </application>
 
 </manifest>

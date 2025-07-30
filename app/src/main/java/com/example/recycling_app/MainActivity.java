@@ -1,5 +1,6 @@
 package com.example.recycling_app;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -89,6 +90,17 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, FindInfoActivity.class);
                 startActivity(intent);
             }
+        };
+//         TedPermission.with(getApplicationContext())
+//                 .setPermissionListener(permissionListener)
+//                 .setRationaleMessage("카메라 권한이 필요합니다.")
+//                 .setDeniedMessage("거부하셨습니다.")
+//                 .setPermissions(Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.CAMERA)
+//                 .check();
+
+        Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+        startActivity(intent);
+        finish();
         });
     }
 
