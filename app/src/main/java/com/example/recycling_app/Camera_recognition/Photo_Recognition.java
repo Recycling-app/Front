@@ -91,67 +91,6 @@ public class Photo_Recognition extends AppCompatActivity {
 
     }
 
-    // 하단 내비게이션 아이콘들의 클릭 이벤트를 설정하는 메서드
-    private void setupBottomNavigation() {
-        ImageButton homeIcon = findViewById(R.id.home_icon);
-        ImageButton mapIcon = findViewById(R.id.map_icon);
-        ImageButton cameraIcon = findViewById(R.id.camera_icon);
-        ImageButton messageIcon = findViewById(R.id.message_icon);
-        ImageButton accountIcon = findViewById(R.id.account_icon);
-
-        homeIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(Photo_Recognition.this, MainscreenActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(intent);
-            finish();
-        });
-
-        mapIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(Photo_Recognition.this, LocationActivity.class);
-            startActivity(intent);
-        });
-
-        cameraIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(Photo_Recognition.this, CameraActivity.class);
-            startActivity(intent);
-        });
-
-
-        accountIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(Photo_Recognition.this, MypageActivity.class);
-            startActivity(intent);
-        });
-    }
-
-    // 시스템 UI 여백 조절
-    private void applyWindowInsets() {
-        View main_header = findViewById(R.id.main_header);
-        View underbar = findViewById(R.id.underbar);
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (view, insets) -> {
-            // 시스템 바의 크기를 가져옵니다.
-            int topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
-            int bottomInset = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom;
-            int oneDp = (int) (getResources().getDisplayMetrics().density); // 1dp에 해당하는 픽셀 값
-
-            // 상단 헤더의 마진을 조절합니다.
-            if (main_header != null && main_header.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) main_header.getLayoutParams();
-                params.topMargin = topInset + oneDp;
-                main_header.setLayoutParams(params);
-            }
-
-            // 하단 바의 마진을 조절합니다.
-            if (underbar != null && underbar.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) underbar.getLayoutParams();
-                params.bottomMargin = bottomInset + oneDp;
-                underbar.setLayoutParams(params);
-            }
-
-            return WindowInsetsCompat.CONSUMED; // Insets을 소비했음을 시스템에 알립니다.
-        });
-    }
-
     //학습 모델을 이용해서 쓰레기 인식
     private void runAnalysis(Uri localUri) {
         try {
@@ -175,7 +114,7 @@ public class Photo_Recognition extends AppCompatActivity {
     // 인식한 쓰레기를 토대로 Gemini API 호출 및 답변
     private void askGemini(String topic) {
 
-        GenerativeModel gm = new GenerativeModel("gemini-2.5-flash", BuildConfig.GEMINI_API_KEY);
+        GenerativeModel gm = new GenerativeModel("gemini-1.5-pro", BuildConfig.GEMINI_API_KEY);
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
         String prompt = "'" + topic + "'의 올바른 분리수거 방법을 단계별로 특수기호, 특수문자 빼고 설명할 때 앞에 1., 2., 3. 이런 거 붙여서 순서마다 한줄 씩 띄어서 분리수거 방법을 알려주세요.";
         Content content = new Content.Builder().addText(prompt).build();
@@ -278,5 +217,66 @@ public class Photo_Recognition extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         executorService.shutdown();
+    }
+
+    // 하단 내비게이션 아이콘들의 클릭 이벤트를 설정하는 메서드
+    private void setupBottomNavigation() {
+        ImageButton homeIcon = findViewById(R.id.home_icon);
+        ImageButton mapIcon = findViewById(R.id.map_icon);
+        ImageButton cameraIcon = findViewById(R.id.camera_icon);
+        ImageButton messageIcon = findViewById(R.id.message_icon);
+        ImageButton accountIcon = findViewById(R.id.account_icon);
+
+        homeIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(Photo_Recognition.this, MainscreenActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
+        });
+
+        mapIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(Photo_Recognition.this, LocationActivity.class);
+            startActivity(intent);
+        });
+
+        cameraIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(Photo_Recognition.this, CameraActivity.class);
+            startActivity(intent);
+        });
+
+
+        accountIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(Photo_Recognition.this, MypageActivity.class);
+            startActivity(intent);
+        });
+    }
+
+    // 시스템 UI 여백 조절
+    private void applyWindowInsets() {
+        View main_header = findViewById(R.id.main_header);
+        View underbar = findViewById(R.id.underbar);
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (view, insets) -> {
+            // 시스템 바의 크기를 가져옵니다.
+            int topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
+            int bottomInset = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom;
+            int oneDp = (int) (getResources().getDisplayMetrics().density); // 1dp에 해당하는 픽셀 값
+
+            // 상단 헤더의 마진을 조절합니다.
+            if (main_header != null && main_header.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) main_header.getLayoutParams();
+                params.topMargin = topInset + oneDp;
+                main_header.setLayoutParams(params);
+            }
+
+            // 하단 바의 마진을 조절합니다.
+            if (underbar != null && underbar.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) underbar.getLayoutParams();
+                params.bottomMargin = bottomInset + oneDp;
+                underbar.setLayoutParams(params);
+            }
+
+            return WindowInsetsCompat.CONSUMED; // Insets을 소비했음을 시스템에 알립니다.
+        });
     }
 }

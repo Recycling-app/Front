@@ -21,7 +21,8 @@ import java.io.IOException; // IOException import
 // Retrofit 클라이언트를 관리하는 싱글톤 클래스
 public class RetrofitClient {
 
-    private static final String BASE_URL = "http://192.168.123.109:8080/"; // 에뮬레이터에서 로컬 호스트 접속용 IP
+    private static final String BASE_URL = "http://10.0.2.2:8080/"; // 에뮬레이터에서 로컬 호스트 접속용 IP
+    private static final String REAL_DEVICE_BASE_URL = "http://192.168.123.109:8080/";
     private static Retrofit retrofit = null;
     private static ProfileApiService profileApiService = null;
     private static AuthManager authManager = null; // AuthManager 인스턴스
