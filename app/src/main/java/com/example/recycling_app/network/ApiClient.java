@@ -2,13 +2,13 @@ package com.example.recycling_app.Network;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import com.example.recycling_app.BuildConfig;
 
 // Retrofit API 클라이언트를 설정하고 제공하는 클래스
 // 이 클래스를 통해 백엔드 서버와 통신할 Retrofit 인스턴스를 얻음.
 public class ApiClient {
     // 백엔드 서버의 기본 URL
-    // Android 에뮬레이터에서 '10.0.2.2'는 에뮬레이터가 실행되는 호스트 PC의 로컬호스트를 가리킴.
-    private static final String BASE_URL = "http://10.0.2.2:8080/";
+    private static final String BASE_URL = BuildConfig.BASE_URL;
     // Retrofit 객체 인스턴스. 앱 전체에서 단일 인스턴스를 재사용하기 위해 static으로 선언
     private static Retrofit retrofit;
 

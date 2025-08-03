@@ -28,8 +28,7 @@
         android:roundIcon="@mipmap/ic_launcher_foreground"
         android:supportsRtl="true"
         android:theme="@style/Theme.Recycling_App"
-        tools:replace="android:appComponentFactory"
-        android:appComponentFactory="whateverString">
+        android:networkSecurityConfig="@xml/network_security_config" >
 
         <meta-data
 

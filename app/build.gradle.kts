@@ -38,6 +38,14 @@ android {
             )
             signingConfig = signingConfigs.getByName("release")
         }
+
+        getByName("debug") {
+            // 여기에 작동할 기기의 IP 주소 입력하기
+            buildConfigField("String", "BASE_URL", "\"http://192.168.123.114:8080/\"")
+        }
+        getByName("release") {
+            buildConfigField("String", "BASE_URL", "\"http://192.168.123.114:8080/\"")
+        }
     }
 
     defaultConfig {
