@@ -86,7 +86,7 @@
     <ImageView
         android:id="@+id/underbar"
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="60dp"
         android:contentDescription="언더바"
         android:scaleType="fitXY"
         app:srcCompat="@drawable/underbar"
@@ -170,7 +170,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="14dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="38dp"
         android:contentDescription="홈 아이콘 밑에 초록색 원"
         app:layout_constraintStart_toStartOf="@+id/home_icon"
         app:layout_constraintTop_toTopOf="@+id/home_icon"

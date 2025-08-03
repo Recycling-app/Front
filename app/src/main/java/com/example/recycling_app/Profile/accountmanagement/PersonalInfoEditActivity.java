@@ -2,6 +2,11 @@ package com.example.recycling_app.Profile.accountmanagement;
 
 import androidx.annotation.NonNull; // null이 아님을 명시하는 어노테이션
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log; // 로그 메시지 출력
 import android.view.View;
@@ -9,11 +14,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.recycling_app.Camera_recognition.CameraActivity;
+import com.example.recycling_app.Location.LocationActivity;
+import com.example.recycling_app.MainscreenActivity;
+import com.example.recycling_app.Profile.MypageActivity;
 import com.example.recycling_app.R;
 import com.example.recycling_app.dto.ProfileDTO; // 사용자 프로필 데이터 전송 객체 (DTO) 임포트
 import com.example.recycling_app.service.ProfileApiService; // 프로필 관련 API 서비스 인터페이스 임포트
@@ -157,6 +167,15 @@ public class PersonalInfoEditActivity extends AppCompatActivity {
             Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
             finish(); // 로그인되지 않은 경우 액티비티 종료
         }
+
+        // EdgeToEdge 관련 코드: 시스템 바(상단바, 하단바)의 인셋을 고려하여 뷰의 패딩을 조정
+        // 이 코드는 레이아웃 콘텐츠가 시스템 바 아래로 확장될 때, 콘텐츠가 시스템 바에 가려지지 않도록 패딩을 추가
+        // `main_layout`은 해당 액티비티의 최상위 레이아웃 ID여야 함
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_layout), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
     }
 
     // 백엔드에서 현재 로그인된 사용자의 개인 정보 데이터를 로드하는 메서드
@@ -302,6 +321,38 @@ public class PersonalInfoEditActivity extends AppCompatActivity {
                 Log.e(TAG, "네트워크 오류: " + t.getMessage(), t);
                 Toast.makeText(PersonalInfoEditActivity.this, "네트워크 오류: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
+        });
+    }
+
+    // 하단 내비게이션 아이콘들의 클릭 이벤트를 설정하는 메서드
+    private void setupBottomNavigation() {
+        ImageButton homeIcon = findViewById(R.id.home_icon);
+        ImageButton mapIcon = findViewById(R.id.map_icon);
+        ImageButton cameraIcon = findViewById(R.id.camera_icon);
+        ImageButton messageIcon = findViewById(R.id.message_icon);
+        ImageButton accountIcon = findViewById(R.id.account_icon);
+
+        homeIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(PersonalInfoEditActivity.this, MainscreenActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
+        });
+
+        mapIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(PersonalInfoEditActivity.this, LocationActivity.class);
+            startActivity(intent);
+        });
+
+        cameraIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(PersonalInfoEditActivity.this, CameraActivity.class);
+            startActivity(intent);
+        });
+
+
+        accountIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(PersonalInfoEditActivity.this, MypageActivity.class);
+            startActivity(intent);
         });
     }
 }

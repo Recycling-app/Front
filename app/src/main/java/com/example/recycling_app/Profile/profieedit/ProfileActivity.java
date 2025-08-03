@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent; // Intent 임포트: 다른 Activity를 시작할 때 사용
 import android.os.Bundle; // Bundle 임포트: Activity 상태 저장 및 복원 시 사용
 import android.view.View; // View 임포트: UI 컴포넌트의 기본 클래스
+import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView; // ImageView 임포트: 이미지 뷰
 import android.widget.TextView; // TextView 임포트: 텍스트 뷰
 import android.widget.Toast; // Toast 임포트: 짧은 메시지 팝업
@@ -13,11 +15,17 @@ import androidx.core.graphics.Insets; // Insets 임포트: 시스템 바 인셋(
 import androidx.core.view.ViewCompat; // ViewCompat 임포트: 뷰 호환성 유틸리티
 import androidx.core.view.WindowInsetsCompat; // WindowInsetsCompat 임포트: 윈도우 인셋(inset) 호환성 유틸리티
 
+import com.example.recycling_app.Camera_recognition.CameraActivity;
+import com.example.recycling_app.Camera_recognition.Photo_Recognition;
+import com.example.recycling_app.Location.LocationActivity;
+import com.example.recycling_app.MainscreenActivity;
+import com.example.recycling_app.Profile.MypageActivity;
 import com.example.recycling_app.Profile.mysetting.SettingsActivity;
 import com.example.recycling_app.Profile.detailsofuse.UsageHistoryActivity;
 import com.example.recycling_app.Profile.accountmanagement.AccountManagementActivity;
 import com.example.recycling_app.Profile.customerservice.CustomerSupportActivity;
 import com.example.recycling_app.R;
+import com.example.recycling_app.StartscreenActivity;
 
 //사용자의 프로필 정보를 표시하고, 다양한 마이페이지 메뉴로 이동할 수 있는 Activity.
 public class ProfileActivity extends AppCompatActivity {
@@ -56,8 +64,6 @@ public class ProfileActivity extends AppCompatActivity {
         itemCustomerSupport = findViewById(R.id.item_customer_support);
         itemLogout = findViewById(R.id.item_logout);
 
-        // 예시 데이터 설정 (실제 앱에서는 사용자 로그인 정보 등을 동적으로 가져와 설정)
-        profileName.setText("홍길동");
         // profileImage.setImageResource(R.drawable.your_user_profile_image); // 실제 사용자 이미지로 변경 필요
 
         // --- 클릭 리스너 설정 ---
@@ -104,7 +110,8 @@ public class ProfileActivity extends AppCompatActivity {
         itemLogout.setOnClickListener(v -> {
             Toast.makeText(ProfileActivity.this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
             // TODO: 실제 로그아웃 로직 구현 필요 (예: 사용자 세션 삭제, 로그인 화면으로 리디렉션 등)
-            finish(); // 현재 Activity를 종료하여 이전 스택의 Activity로 돌아감 (또는 로그인 화면으로 이동)
+            Intent intent = new Intent(ProfileActivity.this, StartscreenActivity.class);
+            startActivity(intent);
         });
 
         // EdgeToEdge 관련 코드: 시스템 바(상단바, 하단바)의 인셋을 고려하여 뷰의 패딩을 조정
@@ -114,6 +121,38 @@ public class ProfileActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+    }
+
+    // 하단 내비게이션 아이콘들의 클릭 이벤트를 설정하는 메서드
+    private void setupBottomNavigation() {
+        ImageButton homeIcon = findViewById(R.id.home_icon);
+        ImageButton mapIcon = findViewById(R.id.map_icon);
+        ImageButton cameraIcon = findViewById(R.id.camera_icon);
+        ImageButton messageIcon = findViewById(R.id.message_icon);
+        ImageButton accountIcon = findViewById(R.id.account_icon);
+
+        homeIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, MainscreenActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
+        });
+
+        mapIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, LocationActivity.class);
+            startActivity(intent);
+        });
+
+        cameraIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, CameraActivity.class);
+            startActivity(intent);
+        });
+
+
+        accountIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, MypageActivity.class);
+            startActivity(intent);
         });
     }
 }

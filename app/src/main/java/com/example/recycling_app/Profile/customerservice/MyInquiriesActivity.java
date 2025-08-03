@@ -9,14 +9,22 @@ import android.view.LayoutInflater; // XML 레이아웃을 View 객체로 변환
 import android.view.View; // UI 컴포넌트의 기본 클래스
 import android.view.ViewGroup; // View 그룹 (레이아웃)
 import android.widget.Button; // 버튼 위젯
+import android.widget.ImageButton;
 import android.widget.ImageView; // 이미지 뷰
 import android.widget.LinearLayout; // LinearLayout 위젯 (레이아웃 그룹)
 import android.widget.TextView; // 텍스트 뷰
 import android.widget.Toast; // 짧은 메시지 팝업
 
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager; // RecyclerView의 항목을 선형으로 배열
 import androidx.recyclerview.widget.RecyclerView; // 스크롤 가능한 대량의 항목을 효율적으로 표시
 
+import com.example.recycling_app.Camera_recognition.CameraActivity;
+import com.example.recycling_app.Location.LocationActivity;
+import com.example.recycling_app.MainscreenActivity;
+import com.example.recycling_app.Profile.MypageActivity;
 import com.example.recycling_app.R;
 import com.example.recycling_app.dto.InquiryDTO; // 문의 데이터 DTO
 import com.example.recycling_app.service.ProfileApiService; // 백엔드 프로필 API 서비스 인터페이스
@@ -125,6 +133,15 @@ public class MyInquiriesActivity extends AppCompatActivity {
             Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
             finish(); // 로그인되지 않은 경우 액티비티 종료
         }
+
+        // EdgeToEdge 관련 코드: 시스템 바(상단바, 하단바)의 인셋을 고려하여 뷰의 패딩을 조정
+        // 이 코드는 레이아웃 콘텐츠가 시스템 바 아래로 확장될 때, 콘텐츠가 시스템 바에 가려지지 않도록 패딩을 추가
+        // `main_layout`은 해당 액티비티의 최상위 레이아웃 ID여야 함
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_layout), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
     }
 
     // 액티비티가 다시 화면에 나타날 때마다 문의 목록을 새로고침
@@ -275,5 +292,37 @@ public class MyInquiriesActivity extends AppCompatActivity {
                 tvInquiryAnswer = itemView.findViewById(R.id.tv_inquiry_answer);
             }
         }
+    }
+
+    // 하단 내비게이션 아이콘들의 클릭 이벤트를 설정하는 메서드
+    private void setupBottomNavigation() {
+        ImageButton homeIcon = findViewById(R.id.home_icon);
+        ImageButton mapIcon = findViewById(R.id.map_icon);
+        ImageButton cameraIcon = findViewById(R.id.camera_icon);
+        ImageButton messageIcon = findViewById(R.id.message_icon);
+        ImageButton accountIcon = findViewById(R.id.account_icon);
+
+        homeIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(MyInquiriesActivity.this, MainscreenActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
+        });
+
+        mapIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(MyInquiriesActivity.this, LocationActivity.class);
+            startActivity(intent);
+        });
+
+        cameraIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(MyInquiriesActivity.this, CameraActivity.class);
+            startActivity(intent);
+        });
+
+
+        accountIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(MyInquiriesActivity.this, MypageActivity.class);
+            startActivity(intent);
+        });
     }
 }
