@@ -28,30 +28,35 @@ import com.example.recycling_app.Profile.profieedit.ProfileEditActivity;
 import com.example.recycling_app.R;
 
 // 마이페이지 기능을 담당하는 액티비티
+// 사용자에게 프로필 정보 표시 및 다양한 메뉴(프로필 수정, 계정 관리, 이용 내역, 설정, 고객 지원, 로그아웃) 제공
 public class MypageActivity extends AppCompatActivity {
-    private ImageView backArrowIcon;
-    private TextView mypageTitle;
-    private de.hdodenhof.circleimageview.CircleImageView profileImage;
-    private TextView profileName;
-    private View itemProfileEdit;
-    private View itemAccountManagement;
-    private View itemUsageHistory;
-    private View itemSettings;
-    private View itemCustomerSupport;
-    private View itemLogout;
+    // UI 요소들을 위한 변수 선언
+    private ImageView backArrowIcon; // 뒤로가기 화살표 아이콘
+    private TextView mypageTitle; // 마이페이지 제목 텍스트
+    private de.hdodenhof.circleimageview.CircleImageView profileImage; // 원형 프로필 이미지 뷰 (서드파티 라이브러리)
+    private TextView profileName; // 사용자 프로필 이름 텍스트
+
+    // 메뉴 항목들을 나타내는 View 변수들 (주로 LinearLayout이나 ConstraintLayout)
+    private View itemProfileEdit; // '프로필 수정' 메뉴
+    private View itemAccountManagement; // '계정 관리' 메뉴
+    private View itemUsageHistory; // '이용 내역' 메뉴
+    private View itemSettings; // '설정' 메뉴
+    private View itemCustomerSupport; // '고객 지원' 메뉴
+    private View itemLogout; // '로그아웃' 메뉴
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_profile);
+        EdgeToEdge.enable(this); // EdgeToEdge 기능을 활성화하여 시스템 바(상단바, 하단바) 영역까지 콘텐츠를 확장
+        setContentView(R.layout.activity_profile); // 이 액티비티에 연결될 레이아웃 파일 지정 (activity_profile.xml)
 
         // UI 요소 초기화 (XML 레이아웃의 ID와 연결)
         backArrowIcon = findViewById(R.id.back_arrow_icon);
         mypageTitle = findViewById(R.id.mypage_title);
-        profileImage = findViewById(R.id.profile_image);
+        profileImage = findViewById(R.id.profile_image); // CircleImageView 위젯과 연결
         profileName = findViewById(R.id.profile_name);
 
+        // 각 메뉴 항목 View들을 ID로 찾아서 연결
         itemProfileEdit = findViewById(R.id.item_profile_edit);
         itemAccountManagement = findViewById(R.id.item_account_management);
         itemUsageHistory = findViewById(R.id.item_usage_history);
@@ -62,29 +67,39 @@ public class MypageActivity extends AppCompatActivity {
         // 하단 내비게이션 아이콘들의 클릭 이벤트를 설정
         setupBottomNavigation();
 
-        // --- 클릭 리스너 설정 ---
-        backArrowIcon.setOnClickListener(v -> onBackPressed());
+        // 뒤로가기 아이콘 클릭 리스너
+        backArrowIcon.setOnClickListener(v -> onBackPressed()); // 클릭 시 이전 화면으로 돌아감
 
+        // '프로필 수정' 메뉴 클릭 리스너
+        // ProfileEditActivity로 이동하는 Intent 생성 및 시작
         itemProfileEdit.setOnClickListener(v -> {
             Intent intent = new Intent(MypageActivity.this, ProfileEditActivity.class);
             startActivity(intent);
         });
 
+        // '계정 관리' 메뉴 클릭 리스너
+        // AccountManagementActivity로 이동하는 Intent 생성 및 시작
         itemAccountManagement.setOnClickListener(v -> {
             Intent intent = new Intent(MypageActivity.this, AccountManagementActivity.class);
             startActivity(intent);
         });
 
+        // '이용 내역' 메뉴 클릭 리스너
+        // UsageHistoryActivity로 이동하는 Intent 생성 및 시작
         itemUsageHistory.setOnClickListener(v -> {
             Intent intent = new Intent(MypageActivity.this, UsageHistoryActivity.class);
             startActivity(intent);
         });
 
+        // '설정' 메뉴 클릭 리스너
+        // SettingsActivity로 이동하는 Intent 생성 및 시작
         itemSettings.setOnClickListener(v -> {
             Intent intent = new Intent(MypageActivity.this, SettingsActivity.class);
             startActivity(intent);
         });
 
+        // '설정' 메뉴 클릭 리스너
+        // SettingsActivity로 이동하는 Intent 생성 및 시작
         itemCustomerSupport.setOnClickListener(v -> {
             Intent intent = new Intent(MypageActivity.this, CustomerSupportActivity.class);
             startActivity(intent);
@@ -99,6 +114,9 @@ public class MypageActivity extends AppCompatActivity {
             finish();
         });
 
+        // EdgeToEdge 관련 코드: 시스템 바(상단바, 하단바)의 인셋을 고려하여 뷰의 패딩을 조정
+        // 이 코드는 레이아웃이 시스템 바 아래로 확장될 때 콘텐츠가 시스템 바에 가려지지 않도록 함
+        // 시스템 바의 인셋만큼 뷰의 좌, 상, 우, 하 패딩을 설정
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_layout), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
