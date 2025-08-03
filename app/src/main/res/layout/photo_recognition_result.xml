@@ -84,7 +84,7 @@
     <ImageView
         android:id="@+id/underbar"
         android:layout_width="0dp"
-        android:layout_height="67dp"
+        android:layout_height="60dp"
         android:contentDescription="언더바"
         android:elevation="8dp"
         android:scaleType="fitXY"
@@ -139,7 +139,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="14dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="37dp"
         android:contentDescription="아이콘 밑에 초록색 원"
         android:elevation="10dp"
         app:layout_constraintStart_toStartOf="@+id/camera_icon"
