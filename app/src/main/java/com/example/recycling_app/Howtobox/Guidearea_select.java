@@ -7,9 +7,11 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.example.recycling_app.Camera_recognition.CameraActivity;
 import com.example.recycling_app.Location.LocationActivity;
@@ -25,7 +27,22 @@ public class Guidearea_select extends AppCompatActivity {
 
         setupBottomNavigation(); // 하단 내비게이션 아이콘들의 클릭 이벤트를 설정하는 메서드
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false); // Edge-to-Edge UI를 활성화
-        applyWindowInsets(); // 시스템 UI와 여백을 맞추는 로직을 적용
+
+        // EdgeToEdge 관련 코드: 시스템 바(상단바, 하단바)의 인셋을 고려하여 뷰의 패딩을 조정
+        // 이 코드는 레이아웃 콘텐츠가 시스템 바 아래로 확장될 때, 콘텐츠가 시스템 바에 가려지지 않도록 패딩을 추가
+        // `main_layout`은 해당 액티비티의 최상위 레이아웃 ID여야 함
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_layout), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        // 상단바 아이콘과 글씨 색상을 어둡게 설정 (Light Mode)
+        WindowInsetsControllerCompat windowInsetsController =
+                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        if (windowInsetsController != null) {
+            windowInsetsController.setAppearanceLightStatusBars(true);
+        }
     }
 
     // 하단 내비게이션 아이콘들의 클릭 이벤트를 설정하는 메서드
@@ -57,35 +74,6 @@ public class Guidearea_select extends AppCompatActivity {
         accountIcon.setOnClickListener(v -> {
             Intent intent = new Intent(Guidearea_select.this, MypageActivity.class);
             startActivity(intent);
-        });
-    }
-
-    // 시스템 UI 여백 조절
-    private void applyWindowInsets() {
-        View main_header = findViewById(R.id.main_header);
-        View underbar = findViewById(R.id.underbar);
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (view, insets) -> {
-            // 시스템 바의 크기를 가져옵니다.
-            int topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
-            int bottomInset = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom;
-            int oneDp = (int) (getResources().getDisplayMetrics().density); // 1dp에 해당하는 픽셀 값
-
-            // 상단 헤더의 마진을 조절합니다.
-            if (main_header != null && main_header.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) main_header.getLayoutParams();
-                params.topMargin = topInset + oneDp;
-                main_header.setLayoutParams(params);
-            }
-
-            // 하단 바의 마진을 조절합니다.
-            if (underbar != null && underbar.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) underbar.getLayoutParams();
-                params.bottomMargin = bottomInset + oneDp;
-                underbar.setLayoutParams(params);
-            }
-
-            return WindowInsetsCompat.CONSUMED; // Insets을 소비했음을 시스템에 알립니다.
         });
     }
 }
