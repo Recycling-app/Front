@@ -10,6 +10,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView; // 이미지 뷰
 import android.widget.TextView; // 텍스트 뷰
 import android.widget.Toast; // 짧은 메시지 팝업
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
 import androidx.activity.EdgeToEdge; // 화면 전체를 사용하는 EdgeToEdge 기능 활성화
 import androidx.core.graphics.Insets; // 시스템 바 인셋(inset) 정보
@@ -43,6 +47,8 @@ public class MypageActivity extends AppCompatActivity {
     private View itemSettings; // '설정' 메뉴
     private View itemCustomerSupport; // '고객 지원' 메뉴
     private View itemLogout; // '로그아웃' 메뉴
+    private FirebaseAuth mAuth;
+    private GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +69,14 @@ public class MypageActivity extends AppCompatActivity {
         itemSettings = findViewById(R.id.item_settings);
         itemCustomerSupport = findViewById(R.id.item_customer_support);
         itemLogout = findViewById(R.id.item_logout);
+
+        // Firebase 및 Google 로그인 클라이언트 초기화
+        mAuth = FirebaseAuth.getInstance();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         // 하단 내비게이션 아이콘들의 클릭 이벤트를 설정
         setupBottomNavigation();
@@ -107,11 +121,7 @@ public class MypageActivity extends AppCompatActivity {
 
         // 로그아웃 메뉴 클릭 시 Firebase 로그아웃 처리 추가
         itemLogout.setOnClickListener(v -> {
-            Toast.makeText(MypageActivity.this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
-            // 로그아웃 후 로그인 화면으로 이동
-            Intent intent = new Intent(MypageActivity.this, StartscreenActivity.class);
-            startActivity(intent);
-            finish();
+            signOut(); // 로그아웃 메소드 호출
         });
 
         // EdgeToEdge 관련 코드: 시스템 바(상단바, 하단바)의 인셋을 고려하여 뷰의 패딩을 조정
@@ -121,6 +131,21 @@ public class MypageActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+    }
+
+    // 로그아웃 기능을 처리하는 메소드 추가
+    private void signOut() {
+        // Firebase에서 현재 사용자 로그아웃 처리
+        mAuth.signOut();
+
+        // Google Sign In 클라이언트에서 로그아웃 처리
+        mGoogleSignInClient.signOut().addOnCompleteListener(task -> {
+            // 로그아웃이 완료되면 토스트 메시지를 띄우고 로그인 화면으로 이동
+            Toast.makeText(MypageActivity.this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MypageActivity.this, StartscreenActivity.class);
+            startActivity(intent);
+            finish(); // 현재 액티비티를 종료하여 뒤로가기 시 다시 돌아오지 않도록 함
         });
     }
 

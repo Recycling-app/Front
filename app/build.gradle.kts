@@ -67,6 +67,7 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
+        viewBinding = true
     }
 }
 
@@ -112,10 +113,6 @@ dependencies {
     implementation(libs.androidx.exifinterface)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation(platform("com.google.firebase:firebase-bom:32.0.0")) // Firebase BoM (Bill of Materials) 사용 권장
-
-    // Firebase 인증 (FirebaseAuth) 라이브러리
-    implementation("com.google.firebase:firebase-auth") // BOM 사용 시 버전 명시 불필요
     implementation(libs.firebase.firestore)
     implementation(libs.androidx.media3.common)
     implementation(libs.play.services.location)
@@ -126,6 +123,17 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Firebase 추가
+    implementation(platform("com.google.firebase:firebase-bom:33.10.0")) // Firebase BoM 사용 권장
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth") // firebase-auth 포함
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-storage")
+    implementation("com.firebaseui:firebase-ui-storage:8.0.2")
+
+    // Google Services
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
 
     // Retrofit 및 GSON 의존성
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
