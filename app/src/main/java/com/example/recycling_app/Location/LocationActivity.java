@@ -26,6 +26,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -144,6 +145,13 @@ public class LocationActivity extends AppCompatActivity implements LocationAcces
                 ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) findViewById(R.id.currentLocationButton).getLayoutParams();
                 params.bottomMargin = bottomInset + (int) (16 * getResources().getDisplayMetrics().density); // 16dp를 px로 변환하여 더함
                 findViewById(R.id.currentLocationButton).setLayoutParams(params);
+            }
+
+            // 상단바 아이콘과 글씨 색상을 어둡게 설정 (Light Mode)
+            WindowInsetsControllerCompat windowInsetsController =
+                    WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+            if (windowInsetsController != null) {
+                windowInsetsController.setAppearanceLightStatusBars(true);
             }
             return WindowInsetsCompat.CONSUMED; // Insets을 소비했음을 시스템에 알립니다.
         });
