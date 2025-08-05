@@ -10,15 +10,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsControllerCompat;
 
+import com.example.recycling_app.Account.AdditionalInfoActivity;
 import com.example.recycling_app.R;
 
 public class SignupActivity extends AppCompatActivity {
 
     private static final String TAG = "SignupActivity";
-
     private EditText editTextEmail, editTextPassword, editTextPasswordConfirm, editTextNickname, editTextPhone;
     private CheckBox checkboxLocationConsent, checkboxPrivacyConsent;
     private Button buttonNextPage;
@@ -37,29 +35,6 @@ public class SignupActivity extends AppCompatActivity {
         checkboxLocationConsent = findViewById(R.id.checkbox_location_consent);
         checkboxPrivacyConsent = findViewById(R.id.checkbox_privacy_consent);
         buttonNextPage = findViewById(R.id.button_signup);
-
-        // StartscreenActivity에서 전달된 이메일과 이름 정보 받기
-        Intent intent = getIntent();
-        if (intent != null) {
-            String userEmail = intent.getStringExtra("user_email");
-            String userName = intent.getStringExtra("user_name");
-
-            if (!TextUtils.isEmpty(userEmail)) {
-                editTextEmail.setText(userEmail);
-                editTextEmail.setEnabled(false); // 이메일은 수정 불가능하도록 설정
-            }
-            if (!TextUtils.isEmpty(userName)) {
-                editTextNickname.setText(userName);
-                // 닉네임(이름)은 수정 가능하게 둘 수도 있고, 필요에 따라 setEnabled(false) 할 수도 있습니다.
-            }
-        }
-
-        // 상단바 아이콘과 글씨 색상을 어둡게 설정 (Light Mode)
-        WindowInsetsControllerCompat windowInsetsController =
-                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
-        if (windowInsetsController != null) {
-            windowInsetsController.setAppearanceLightStatusBars(true);
-        }
 
         buttonNextPage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,8 +55,8 @@ public class SignupActivity extends AppCompatActivity {
         boolean isPrivacyConsent = checkboxPrivacyConsent.isChecked();
 
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) ||
-                TextUtils.isEmpty(passwordConfirm) || TextUtils.isEmpty(name) ||
-                TextUtils.isEmpty(phoneNumber)) {
+                TextUtils.isEmpty(passwordConfirm) || TextUtils.isEmpty(name) || // 이름 필드 유효성 검사
+                TextUtils.isEmpty(phoneNumber)) { // 전화번호 필드 유효성 검사
             Toast.makeText(this, "모든 필수 필드를 입력해주세요.", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -124,12 +99,5 @@ public class SignupActivity extends AppCompatActivity {
         intent.putExtra("phoneNumber", phoneNumber);
 
         startActivity(intent);
-    }
-
-    @Override
-    public void onBackPressed() {
-        // SignupActivity에서 뒤로가기 시 StartscreenActivity로 돌아가도록 합니다.
-        // StartscreenActivity에서 finish()를 호출하지 않았기 때문에 가능합니다.
-        super.onBackPressed();
     }
 }

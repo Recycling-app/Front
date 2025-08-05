@@ -10,23 +10,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsControllerCompat;
 
-import com.example.recycling_app.StartscreenActivity;
+import com.example.recycling_app.MainscreenActivity;
 import com.example.recycling_app.R;
 import com.example.recycling_app.api.ApiService;
 import com.example.recycling_app.dto.UserSignupRequest;
 import com.example.recycling_app.Network.RetrofitClient;
 import com.example.recycling_app.ui.dialog.SelectionDialogFragment;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,15 +35,12 @@ public class AdditionalInfoActivity extends AppCompatActivity implements Selecti
     private TextView textViewRegion;
     private Button buttonSignup;
 
-    // SignupActivity에서 전달받을 사용자 정보 변수
+    private ApiService apiService;
+
     private String userEmail;
     private String userPassword;
     private String userName;
     private String userPhoneNumber;
-
-    private ApiService apiService;
-    private FirebaseFirestore db; // Firestore 인스턴스
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,25 +48,16 @@ public class AdditionalInfoActivity extends AppCompatActivity implements Selecti
         setContentView(R.layout.activity_additional_info);
 
         apiService = RetrofitClient.getApiService();
-        db = FirebaseFirestore.getInstance(); // Firestore 초기화
 
-        // SignupActivity로부터 전달받은 데이터 초기화
         userEmail = getIntent().getStringExtra("email");
-        userPassword = getIntent().getStringExtra("password"); // 인텐트에서 비밀번호 가져오기
+        userPassword = getIntent().getStringExtra("password");
         userName = getIntent().getStringExtra("name");
-        userPhoneNumber = getIntent().getStringExtra("phoneNumber"); // 인텐트에서 전화번호 가져오기
+        userPhoneNumber = getIntent().getStringExtra("phoneNumber");
 
         textViewAge = findViewById(R.id.text_view_age_selection);
         textViewGender = findViewById(R.id.text_view_gender_selection);
         textViewRegion = findViewById(R.id.text_view_region_selection);
         buttonSignup = findViewById(R.id.button_signup_complete);
-
-        // 상단바 아이콘과 글씨 색상을 어둡게 설정 (Light Mode)
-        WindowInsetsControllerCompat windowInsetsController =
-                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
-        if (windowInsetsController != null) {
-            windowInsetsController.setAppearanceLightStatusBars(true);
-        }
 
         textViewAge.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,16 +134,17 @@ public class AdditionalInfoActivity extends AppCompatActivity implements Selecti
 
         int age = Integer.parseInt(ageStr);
 
-        // UserSignupRequest DTO 생성: userPassword와 userPhoneNumber 사용
+        // UserSignupRequest DTO 생성: 백엔드 DTO의 순서에 맞춰 매개변수 순서 조정
+        // 백엔드 DTO: email, name, password, phoneNumber, age, gender, region
         UserSignupRequest signupRequest = new UserSignupRequest(
-                userEmail,
-                userName,
-                userPassword,
-                userPhoneNumber,
-                age,
-                gender,
-                region,
-                false // AdditionalInfoActivity는 일반 회원가입용이므로 isGoogleUser는 false
+                userEmail,       // email
+                userName,        // name
+                userPassword,    // password
+                userPhoneNumber, // phoneNumber
+                age,             // age
+                gender,          // gender
+                region,           // region
+                false
         );
 
         Call<String> call = apiService.signupUser(signupRequest);
@@ -174,9 +157,10 @@ public class AdditionalInfoActivity extends AppCompatActivity implements Selecti
                     Toast.makeText(AdditionalInfoActivity.this, successMessage != null ? successMessage : "회원가입 성공!", Toast.LENGTH_LONG).show();
                     Log.d(TAG, "회원가입 성공: " + signupRequest.getEmail());
 
-                    // 백엔드에서 Firestore 저장을 처리하므로, 클라이언트 측의 saveUserToFirestore 호출은 제거합니다.
-                    saveUserToFirestore(signupRequest);
-
+                    Intent intent = new Intent(AdditionalInfoActivity.this, MainscreenActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
                 } else {
                     String errorMessage = "회원가입 실패: ";
                     try {
@@ -202,34 +186,5 @@ public class AdditionalInfoActivity extends AppCompatActivity implements Selecti
                 Log.e(TAG, "회원가입 요청 실패 (네트워크 오류)", t);
             }
         });
-    }
-
-    private void saveUserToFirestore(UserSignupRequest user) {
-        Map<String, Object> userMap = new HashMap<>();
-        userMap.put("email", user.getEmail());
-        userMap.put("name", user.getName());
-        userMap.put("age", user.getAge());
-        userMap.put("gender", user.getGender());
-        userMap.put("region", user.getRegion());
-        userMap.put("isGoogleUser", false); // 일반 회원가입이므로 false
-
-        db.collection("users").document(user.getEmail())
-                .set(userMap, SetOptions.merge())
-                .addOnSuccessListener(aVoid -> {
-                    Log.d(TAG, "Firestore에 사용자 정보 저장 성공");
-                    Toast.makeText(AdditionalInfoActivity.this, "회원가입 완료!", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(AdditionalInfoActivity.this, StartscreenActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    finish();
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Firestore에 사용자 정보 저장 실패", e);
-                    Toast.makeText(AdditionalInfoActivity.this, "Firestore 저장 실패. 백엔드에는 회원가입 완료되었습니다.", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(AdditionalInfoActivity.this, StartscreenActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    finish();
-                });
     }
 }
