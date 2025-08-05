@@ -6,32 +6,40 @@ import com.google.gson.annotations.SerializedName;
 public class UserSignupRequest {
     @SerializedName("email") // JSON 키와 필드 이름이 다를 경우 사용
     private String email;
+
     @SerializedName("name")
     private String name;
+
     @SerializedName("password")
     private String password;
+
     @SerializedName("phoneNumber") // 백엔드 필드명 확인
     private String phoneNumber;
+
     @SerializedName("age")
     private int age;
+
     @SerializedName("gender")
     private String gender;
+
     @SerializedName("region")
     private String region;
 
-    // 모든 필드를 포함하는 생성자
-    // 백엔드 DTO의 일반적인 순서 (email, name, password)에 맞춰 조정
-    public UserSignupRequest(String email, String name, String password, String phoneNumber, int age, String gender, String region) {
+    @SerializedName("isGoogleUser")
+    private boolean isGoogleUser;
+
+    public UserSignupRequest(String email, String name, String password, String phoneNumber, int age, String gender, String region, boolean isGoogleUser) {
         this.email = email;
-        this.name = name; // 이름
-        this.password = password; // 비밀번호
+        this.name = name;
+        this.password = password;
         this.phoneNumber = phoneNumber;
         this.age = age;
         this.gender = gender;
         this.region = region;
+        this.isGoogleUser = isGoogleUser;
+
     }
 
-    // Getter
     public String getEmail() {
         return email;
     }
@@ -58,5 +66,9 @@ public class UserSignupRequest {
 
     public String getRegion() {
         return region;
+    }
+
+    public boolean isGoogleUser() {
+        return isGoogleUser;
     }
 }
