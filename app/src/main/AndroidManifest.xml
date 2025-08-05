@@ -18,7 +18,12 @@
     <uses-feature android:name="android.hardware.camera.flash" android:required="false" /> <!-- 카메라 플래쉬 없어도 앱 동작 가능 -->
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" /> <!-- 자동초점 없어도 앱 동작 가능 -->
 
+    <queries>
+        <package android:name="com.google.android.gms" />
+    </queries>
+
     <application
+        android:name=".Network.GlobalApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -71,6 +76,8 @@
             android:name=".Account.LoginActivity" android:exported="false" />
         <activity
             android:name=".Account.FindInfoActivity" android:exported="false" />
+        <activity
+            android:name=".Account.Googleuser_AdditionalInfoActivity" android:exported="false" />
         <activity
             android:name=".MainscreenActivity" android:exported="false" />
         <activity
