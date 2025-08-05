@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.example.recycling_app.Camera_recognition.CameraActivity;
 
@@ -62,6 +63,13 @@ public class MainscreenActivity extends AppCompatActivity {
 
             return WindowInsetsCompat.CONSUMED; // Insets을 소비했음을 시스템에 알립니다.
         });
+
+        // 상단바 아이콘과 글씨 색상을 어둡게 설정 (Light Mode)
+        WindowInsetsControllerCompat windowInsetsController =
+                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        if (windowInsetsController != null) {
+            windowInsetsController.setAppearanceLightStatusBars(true);
+        }
 
         // 카메라 이동
         camerabox.setOnClickListener(new View.OnClickListener() {

@@ -13,7 +13,9 @@ import android.widget.Toast; // Toast 임포트: 짧은 메시지 팝업
 import androidx.activity.EdgeToEdge; // EdgeToEdge 임포트: 화면 전체를 사용하는 기능 활성화
 import androidx.core.graphics.Insets; // Insets 임포트: 시스템 바 인셋(inset) 정보
 import androidx.core.view.ViewCompat; // ViewCompat 임포트: 뷰 호환성 유틸리티
+import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat; // WindowInsetsCompat 임포트: 윈도우 인셋(inset) 호환성 유틸리티
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.example.recycling_app.Camera_recognition.CameraActivity;
 import com.example.recycling_app.Camera_recognition.Photo_Recognition;
@@ -122,6 +124,13 @@ public class ProfileActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // 상단바 아이콘과 글씨 색상을 어둡게 설정 (Light Mode)
+        WindowInsetsControllerCompat windowInsetsController =
+                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        if (windowInsetsController != null) {
+            windowInsetsController.setAppearanceLightStatusBars(true);
+        }
     }
 
     // 하단 내비게이션 아이콘들의 클릭 이벤트를 설정하는 메서드

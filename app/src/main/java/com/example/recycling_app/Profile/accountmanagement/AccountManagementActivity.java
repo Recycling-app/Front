@@ -3,7 +3,9 @@ package com.example.recycling_app.Profile.accountmanagement;
 import androidx.appcompat.app.AppCompatActivity; // 안드로이드의 기본 액티비티 클래스
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import android.content.Intent; // 다른 액티비티를 시작할 때 사용
 import android.os.Bundle; // 액티비티 상태 저장/복원 시 사용
@@ -46,6 +48,7 @@ public class AccountManagementActivity extends AppCompatActivity {
 
         // 하단 내비게이션 아이콘들의 클릭 이벤트를 설정하는 메서드
         setupBottomNavigation();
+
 
         // 뒤로가기 아이콘 클릭 리스너 설정
         backArrowIcon.setOnClickListener(new View.OnClickListener() {
@@ -93,6 +96,13 @@ public class AccountManagementActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // 상단바 아이콘과 글씨 색상을 어둡게 설정 (Light Mode)
+        WindowInsetsControllerCompat windowInsetsController =
+                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        if (windowInsetsController != null) {
+            windowInsetsController.setAppearanceLightStatusBars(true);
+        }
     }
 
     // 하단 내비게이션 아이콘들의 클릭 이벤트를 설정하는 메서드

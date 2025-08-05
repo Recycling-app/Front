@@ -18,7 +18,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import androidx.activity.EdgeToEdge; // 화면 전체를 사용하는 EdgeToEdge 기능 활성화
 import androidx.core.graphics.Insets; // 시스템 바 인셋(inset) 정보
 import androidx.core.view.ViewCompat; // 뷰 호환성 유틸리티
+import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat; // 윈도우 인셋(inset) 호환성 유틸리티
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.example.recycling_app.StartscreenActivity;
 import com.example.recycling_app.Camera_recognition.CameraActivity;
@@ -78,6 +80,17 @@ public class MypageActivity extends AppCompatActivity {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+        // 현재 로그인된 사용자의 이름 가져와서 설정
+        if (mAuth.getCurrentUser() != null) {
+            String userName = mAuth.getCurrentUser().getDisplayName();
+            if (userName != null && !userName.isEmpty()) {
+                profileName.setText(userName);
+            } else {
+                // 이름이 없을 경우 이메일을 표시하거나 기본 텍스트 설정
+                profileName.setText("사용자");
+            }
+        }
+
         // 하단 내비게이션 아이콘들의 클릭 이벤트를 설정
         setupBottomNavigation();
 
@@ -132,6 +145,13 @@ public class MypageActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // 상단바 아이콘과 글씨 색상을 어둡게 설정 (Light Mode)
+        WindowInsetsControllerCompat windowInsetsController =
+                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        if (windowInsetsController != null) {
+            windowInsetsController.setAppearanceLightStatusBars(true);
+        }
     }
 
     // 로그아웃 기능을 처리하는 메소드 추가

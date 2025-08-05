@@ -10,10 +10,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.example.recycling_app.MainscreenActivity;
 import com.example.recycling_app.R;
-import com.example.recycling_app.StartscreenActivity;
 import com.example.recycling_app.api.ApiService;
 import com.example.recycling_app.dto.JwtLoginResponse;
 import com.example.recycling_app.dto.LoginRequest;
@@ -38,7 +39,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login); // 로그인 화면 레이아웃
 
         apiService = RetrofitClient.getApiService();
-
         editTextEmail = findViewById(R.id.edit_text_login_email);
         editTextPassword = findViewById(R.id.edit_text_login_password);
         buttonLogin = findViewById(R.id.button_login_submit);
@@ -49,6 +49,13 @@ public class LoginActivity extends AppCompatActivity {
                 attemptLogin();
             }
         });
+
+        // 상단바 아이콘과 글씨 색상을 어둡게 설정 (Light Mode)
+        WindowInsetsControllerCompat windowInsetsController =
+                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        if (windowInsetsController != null) {
+            windowInsetsController.setAppearanceLightStatusBars(true);
+        }
     }
 
     private void attemptLogin() {
