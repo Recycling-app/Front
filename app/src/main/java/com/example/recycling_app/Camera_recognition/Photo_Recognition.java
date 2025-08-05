@@ -12,7 +12,6 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -55,18 +54,25 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Photo_Recognition extends AppCompatActivity {
 
     private ImageView resultImageView;
-    private TextView titleTextView; // titleTextView 추가
+    private TextView titleTextView;
     private TextView resultTextView;
     private ProgressBar progressBar;
     private final List<Module> pytorchModules = new ArrayList<>();
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private final AtomicBoolean isModelLoaded = new AtomicBoolean(false);
+
+    // Gemini API 응답을 저장할 캐시 맵 추가
+    private final Map<String, String> geminiCache = new HashMap<>();
 
     private final String[] modelFiles = {"Train_model8.ptl", "Train_model13.ptl"};
     private final String[] classLabels = new String[]{"건전지", "금속", "비닐", "스티로폼", "유리", "종이", "종이박스", "플라스틱", "형광등"};
@@ -79,18 +85,13 @@ public class Photo_Recognition extends AppCompatActivity {
         setContentView(R.layout.photo_recognition_result);
 
         resultImageView = findViewById(R.id.resultImageView);
-        titleTextView = findViewById(R.id.titleTextView); // titleTextView 초기화
+        titleTextView = findViewById(R.id.titleTextView);
         resultTextView = findViewById(R.id.resultTextView);
         progressBar = findViewById(R.id.progressBar);
 
         setupBottomNavigation();
-
-        // 상단바 색상 변경 코드 추가
-        WindowInsetsControllerCompat windowInsetsController =
-                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
-        if (windowInsetsController != null) {
-            windowInsetsController.setAppearanceLightStatusBars(true);
-        }
+        setupSystemBars();
+        loadPytorchModels();
 
         String imageUriString = getIntent().getStringExtra("imageUri");
         if (imageUriString == null) {
@@ -103,14 +104,57 @@ public class Photo_Recognition extends AppCompatActivity {
         Glide.with(this).load(imageUri).into(resultImageView);
 
         progressBar.setVisibility(View.VISIBLE);
-        executorService.execute(() -> runAnalysis(imageUri));
 
+        executorService.execute(() -> {
+            while (!isModelLoaded.get()) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return;
+                }
+            }
+            runAnalysis(imageUri);
+        });
+
+        // EdgeToEdge 관련 코드: 시스템 바(상단바, 하단바)의 인셋을 고려하여 뷰의 패딩을 조정
+        // 이 코드는 레이아웃이 시스템 바 아래로 확장될 때 콘텐츠가 시스템 바에 가려지지 않도록 함
+        // 시스템 바의 인셋만큼 뷰의 좌, 상, 우, 하 패딩을 설정
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_layout), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
+        // 상단바 아이콘과 글씨 색상을 어둡게 설정 (Light Mode)
+        WindowInsetsControllerCompat windowInsetsController =
+                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        if (windowInsetsController != null) {
+            windowInsetsController.setAppearanceLightStatusBars(true);
+        }
+    }
+
+    private void setupSystemBars() {
+        WindowInsetsControllerCompat windowInsetsController =
+                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        if (windowInsetsController != null) {
+            windowInsetsController.setAppearanceLightStatusBars(true);
+        }
+    }
+
+    private void loadPytorchModels() {
+        executorService.execute(() -> {
+            try {
+                for (String modelFile : modelFiles) {
+                    pytorchModules.add(LiteModuleLoader.load(assetFilePath(modelFile)));
+                }
+                isModelLoaded.set(true);
+                Log.d("PhotoRecognition", "PyTorch 모델 로딩 완료");
+            } catch (IOException e) {
+                Log.e("PhotoRecognition", "모델 로딩 실패", e);
+                runOnUiThread(() -> Toast.makeText(this, "모델 로딩 실패", Toast.LENGTH_LONG).show());
+            }
+        });
     }
 
     private void runAnalysis(Uri localUri) {
@@ -130,15 +174,27 @@ public class Photo_Recognition extends AppCompatActivity {
         }
     }
 
+    // 캐싱 로직이 추가된 Gemini API 호출 메서드
     private void askGemini(String photoresultname) {
+        // 캐시에 이미 결과가 있는지 확인
+        if (geminiCache.containsKey(photoresultname)) {
+            Log.d("GeminiCache", "캐시된 결과 사용: " + photoresultname);
+            String cachedResult = geminiCache.get(photoresultname);
+            runOnUiThread(() -> {
+                progressBar.setVisibility(View.GONE);
+                displayResults(photoresultname, cachedResult);
+            });
+            return; // 캐시된 결과가 있으면 API 호출 없이 바로 반환
+        }
+
         GenerativeModel gm = new GenerativeModel("gemini-2.5-flash", BuildConfig.GEMINI_API_KEY);
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
         String prompt = String.format(
                 "'" + photoresultname + "'분리수거 방법을 알려주세요. 아래 조건들을 반드시 지켜주세요:\n" +
-                        "1. 단계별로 번호를 붙여 설명해주세요 (예: 1. , 2. , 3. ).\n" +
-                        "2. 각 단계는 명확하고 간결한 문장으로 작성해주세요.\n" +
-                        "3. 특수문자나 기호는 사용하지 마세요.\n" +
-                        "4. 각 단계 사이에 한 줄씩 띄어주세요."
+                        "단계별로 번호를 붙여 설명해주세요 (예: 1. , 2. , 3. ).\n" +
+                        "각 단계는 간결한 문장으로 작성해주세요.\n" +
+                        "특수문자나 기호는 사용하지 마세요.\n" +
+                        "각 단계 사이에 한 줄씩 띄어주세요."
         );
         Content content = new Content.Builder().addText(prompt).build();
 
@@ -146,8 +202,11 @@ public class Photo_Recognition extends AppCompatActivity {
             @Override
             public void onSuccess(GenerateContentResponse result) {
                 String resultText = result.getText();
+                // **개선:** 새로운 결과를 캐시에 저장
+                geminiCache.put(photoresultname, resultText);
+                Log.d("GeminiCache", "새로운 결과 캐싱: " + photoresultname);
+
                 runOnUiThread(() -> {
-                    // ProgressBar를 숨기고 결과를 표시
                     progressBar.setVisibility(View.GONE);
                     displayResults(photoresultname, resultText);
                 });
@@ -157,7 +216,6 @@ public class Photo_Recognition extends AppCompatActivity {
             public void onFailure(@NonNull Throwable t) {
                 Log.e("GeminiAPI", "API 호출 실패", t);
                 runOnUiThread(() -> {
-                    // ProgressBar를 숨기고 오류 메시지 표시 후 로그인 화면으로 이동
                     progressBar.setVisibility(View.GONE);
                     Toast.makeText(Photo_Recognition.this, "상세 정보를 가져오는 데 실패했습니다.", Toast.LENGTH_SHORT).show();
                     Intent loginIntent = new Intent(Photo_Recognition.this, LoginActivity.class);
@@ -168,12 +226,10 @@ public class Photo_Recognition extends AppCompatActivity {
         }, MoreExecutors.directExecutor());
     }
 
-    // PyTorch 모델 분석 결과에 맞는 이미지와 Gemini API 결과를 표시하는 메서드
     private void displayResults(String classification, String details) {
         int resultImageId = getDrawableIdForClassification(classification);
         resultImageView.setImageResource(resultImageId);
 
-        // 이미지와 텍스트를 조합하여 titleTextView에 표시
         SpannableStringBuilder titleTextBuilder = new SpannableStringBuilder();
         Drawable drawable = getResources().getDrawable(R.drawable.recyclecontainer, getTheme());
         int size = (int) (titleTextView.getTextSize() * 1.2);
@@ -185,11 +241,9 @@ public class Photo_Recognition extends AppCompatActivity {
                 .append(classification);
         titleTextView.setText(titleTextBuilder);
 
-        // Gemini API 응답을 resultTextView에 표시
         resultTextView.setText(details);
     }
 
-    // 분류 결과에 따라 다른 Drawable 리소스 ID를 반환하는 메서드
     @DrawableRes
     private int getDrawableIdForClassification(String classification) {
         switch (classification) {
@@ -206,7 +260,6 @@ public class Photo_Recognition extends AppCompatActivity {
         }
     }
 
-    // Drawable 리소스를 Bitmap으로 변환하는 함수
     private Bitmap getBitmapFromDrawable(int drawableId) {
         Drawable drawable = getResources().getDrawable(drawableId, getTheme());
         if (drawable instanceof BitmapDrawable) {
@@ -220,12 +273,7 @@ public class Photo_Recognition extends AppCompatActivity {
     }
 
     private String runEnsembleInference(Uri uri) throws IOException {
-        if (pytorchModules.isEmpty()) {
-            for (String modelFile : modelFiles) {
-                pytorchModules.add(LiteModuleLoader.load(assetFilePath(modelFile)));
-            }
-        }
-
+        // 이미 모델이 로딩되었는지 확인하는 로직은 loadPytorchModels에서 처리됨
         Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, 512, 512, true);
         final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(resizedBitmap,
@@ -298,7 +346,6 @@ public class Photo_Recognition extends AppCompatActivity {
         executorService.shutdown();
     }
 
-    // 하단 내비게이션 아이콘들의 클릭 이벤트를 설정하는 메서드
     private void setupBottomNavigation() {
         ImageButton homeIcon = findViewById(R.id.home_icon);
         ImageButton mapIcon = findViewById(R.id.map_icon);
