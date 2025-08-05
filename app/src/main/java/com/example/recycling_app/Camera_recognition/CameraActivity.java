@@ -55,7 +55,6 @@ public class CameraActivity extends AppCompatActivity {
 
         cameraPreview = findViewById(R.id.cameraPreview);
         captureButton = findViewById(R.id.button_capture);
-        progressBar = findViewById(R.id.progressBar);
         recognitionFrame = findViewById(R.id.recognition_frame);
         cameraExecutor = Executors.newSingleThreadExecutor();
 
@@ -93,8 +92,6 @@ public class CameraActivity extends AppCompatActivity {
 
     private void takePhoto() {
         if (imageCapture == null) return;
-
-        progressBar.setVisibility(View.VISIBLE);
         captureButton.setEnabled(false);
 
         // 원본 이미지를 저장할 파일
@@ -178,7 +175,6 @@ public class CameraActivity extends AppCompatActivity {
                     @Override
                     public void onError(@NonNull ImageCaptureException exception) {
                         Log.e(TAG, "사진 촬영 실패: " + exception.getMessage(), exception);
-                        progressBar.setVisibility(View.GONE);
                         captureButton.setEnabled(true);
                         Toast.makeText(CameraActivity.this, "사진 촬영에 실패했습니다.", Toast.LENGTH_SHORT).show();
                     }

@@ -2,9 +2,14 @@ package com.example.recycling_app.Camera_recognition;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +19,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.bumptech.glide.Glide;
+import com.example.recycling_app.Account.LoginActivity;
 import com.example.recycling_app.BuildConfig;
 import com.example.recycling_app.Location.LocationActivity;
 import com.example.recycling_app.MainscreenActivity;
@@ -53,6 +62,7 @@ import java.util.concurrent.Executors;
 public class Photo_Recognition extends AppCompatActivity {
 
     private ImageView resultImageView;
+    private TextView titleTextView; // titleTextView 추가
     private TextView resultTextView;
     private ProgressBar progressBar;
     private final List<Module> pytorchModules = new ArrayList<>();
@@ -65,15 +75,22 @@ public class Photo_Recognition extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false); // Edge-to-Edge UI를 활성화
-        setContentView(R.layout.photo_recognition_result); // 레이아웃을 설정
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        setContentView(R.layout.photo_recognition_result);
 
         resultImageView = findViewById(R.id.resultImageView);
+        titleTextView = findViewById(R.id.titleTextView); // titleTextView 초기화
         resultTextView = findViewById(R.id.resultTextView);
         progressBar = findViewById(R.id.progressBar);
 
-        setupBottomNavigation(); // 하단 내비게이션 아이콘들의 클릭 이벤트를 설정하는 메서드
-        applyWindowInsets(); // 시스템 UI와 여백을 맞추는 로직을 적용
+        setupBottomNavigation();
+
+        // 상단바 색상 변경 코드 추가
+        WindowInsetsControllerCompat windowInsetsController =
+                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        if (windowInsetsController != null) {
+            windowInsetsController.setAppearanceLightStatusBars(true);
+        }
 
         String imageUriString = getIntent().getStringExtra("imageUri");
         if (imageUriString == null) {
@@ -86,22 +103,24 @@ public class Photo_Recognition extends AppCompatActivity {
         Glide.with(this).load(imageUri).into(resultImageView);
 
         progressBar.setVisibility(View.VISIBLE);
-        resultTextView.setText("쓰레기를 인식하고 있습니다...");
         executorService.execute(() -> runAnalysis(imageUri));
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_layout), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
     }
 
-    //학습 모델을 이용해서 쓰레기 인식
     private void runAnalysis(Uri localUri) {
         try {
             String classificationResult = runEnsembleInference(localUri);
             if (classificationResult == null) {
                 throw new RuntimeException("PyTorch 모델 분석에 실패했습니다.");
             }
-            runOnUiThread(() -> resultTextView.setText("'" + classificationResult + "'(으)로 인식되었습니다.\n자세한 정보를 조회합니다..."));
-
+            runOnUiThread(() -> resultTextView.setText("'" + classificationResult + "'(으)로 인식되었습니다."));
             askGemini(classificationResult);
-
         } catch (Exception e) {
             Log.e("PhotoRecognition", "분석 중 오류 발생", e);
             runOnUiThread(() -> {
@@ -111,12 +130,16 @@ public class Photo_Recognition extends AppCompatActivity {
         }
     }
 
-    // 인식한 쓰레기를 토대로 Gemini API 호출 및 답변
-    private void askGemini(String topic) {
-
-        GenerativeModel gm = new GenerativeModel("gemini-1.5-flash", BuildConfig.GEMINI_API_KEY);
+    private void askGemini(String photoresultname) {
+        GenerativeModel gm = new GenerativeModel("gemini-2.5-flash", BuildConfig.GEMINI_API_KEY);
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
-        String prompt = "'" + topic + "'의 올바른 분리수거 방법을 단계별로 앞에 번호를 붙여서 한줄 씩 띄어서 분리수거 방법을 알려주세요.";
+        String prompt = String.format(
+                "'" + photoresultname + "'분리수거 방법을 알려주세요. 아래 조건들을 반드시 지켜주세요:\n" +
+                        "1. 단계별로 번호를 붙여 설명해주세요 (예: 1. , 2. , 3. ).\n" +
+                        "2. 각 단계는 명확하고 간결한 문장으로 작성해주세요.\n" +
+                        "3. 특수문자나 기호는 사용하지 마세요.\n" +
+                        "4. 각 단계 사이에 한 줄씩 띄어주세요."
+        );
         Content content = new Content.Builder().addText(prompt).build();
 
         Futures.addCallback(model.generateContent(content), new FutureCallback<GenerateContentResponse>() {
@@ -124,8 +147,9 @@ public class Photo_Recognition extends AppCompatActivity {
             public void onSuccess(GenerateContentResponse result) {
                 String resultText = result.getText();
                 runOnUiThread(() -> {
+                    // ProgressBar를 숨기고 결과를 표시
                     progressBar.setVisibility(View.GONE);
-                    resultTextView.setText(resultText);
+                    displayResults(photoresultname, resultText);
                 });
             }
 
@@ -133,11 +157,66 @@ public class Photo_Recognition extends AppCompatActivity {
             public void onFailure(@NonNull Throwable t) {
                 Log.e("GeminiAPI", "API 호출 실패", t);
                 runOnUiThread(() -> {
+                    // ProgressBar를 숨기고 오류 메시지 표시 후 로그인 화면으로 이동
                     progressBar.setVisibility(View.GONE);
-                    resultTextView.setText("상세 정보를 가져오는 데 실패했습니다.\n" + t.getMessage());
+                    Toast.makeText(Photo_Recognition.this, "상세 정보를 가져오는 데 실패했습니다.", Toast.LENGTH_SHORT).show();
+                    Intent loginIntent = new Intent(Photo_Recognition.this, LoginActivity.class);
+                    startActivity(loginIntent);
+                    finish();
                 });
             }
         }, MoreExecutors.directExecutor());
+    }
+
+    // PyTorch 모델 분석 결과에 맞는 이미지와 Gemini API 결과를 표시하는 메서드
+    private void displayResults(String classification, String details) {
+        int resultImageId = getDrawableIdForClassification(classification);
+        resultImageView.setImageResource(resultImageId);
+
+        // 이미지와 텍스트를 조합하여 titleTextView에 표시
+        SpannableStringBuilder titleTextBuilder = new SpannableStringBuilder();
+        Drawable drawable = getResources().getDrawable(R.drawable.recyclecontainer, getTheme());
+        int size = (int) (titleTextView.getTextSize() * 1.2);
+        drawable.setBounds(0, 0, size, size);
+        ImageSpan imageSpan = new ImageSpan(drawable, ImageSpan.ALIGN_BOTTOM);
+        titleTextBuilder.append(" ", imageSpan, 0)
+                .append(" ")
+                .append("분리수거 종류 : ")
+                .append(classification);
+        titleTextView.setText(titleTextBuilder);
+
+        // Gemini API 응답을 resultTextView에 표시
+        resultTextView.setText(details);
+    }
+
+    // 분류 결과에 따라 다른 Drawable 리소스 ID를 반환하는 메서드
+    @DrawableRes
+    private int getDrawableIdForClassification(String classification) {
+        switch (classification) {
+            case "건전지": return R.drawable.battery_recycle_img;
+            case "금속": return R.drawable.metal_recycle_img;
+            case "비닐": return R.drawable.plasticbag_recycle_img;
+            case "스티로폼": return R.drawable.styrofoam_recycle_img;
+            case "유리": return R.drawable.glassbottle_recycle_img;
+            case "종이": return R.drawable.paper_recycle_img;
+            case "종이박스": return R.drawable.paperbox_recycle_img;
+            case "플라스틱": return R.drawable.plastic_recycle_img;
+            case "형광등": return R.drawable.fluorescent_lamp_recycle_img;
+            default: return R.drawable.recycle_prohibition;
+        }
+    }
+
+    // Drawable 리소스를 Bitmap으로 변환하는 함수
+    private Bitmap getBitmapFromDrawable(int drawableId) {
+        Drawable drawable = getResources().getDrawable(drawableId, getTheme());
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        }
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
     }
 
     private String runEnsembleInference(Uri uri) throws IOException {
@@ -244,39 +323,9 @@ public class Photo_Recognition extends AppCompatActivity {
             startActivity(intent);
         });
 
-
         accountIcon.setOnClickListener(v -> {
             Intent intent = new Intent(Photo_Recognition.this, MypageActivity.class);
             startActivity(intent);
-        });
-    }
-
-    // 시스템 UI 여백 조절
-    private void applyWindowInsets() {
-        View main_header = findViewById(R.id.main_header);
-        View underbar = findViewById(R.id.underbar);
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (view, insets) -> {
-            // 시스템 바의 크기를 가져옵니다.
-            int topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
-            int bottomInset = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom;
-            int oneDp = (int) (getResources().getDisplayMetrics().density); // 1dp에 해당하는 픽셀 값
-
-            // 상단 헤더의 마진을 조절합니다.
-            if (main_header != null && main_header.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) main_header.getLayoutParams();
-                params.topMargin = topInset + oneDp;
-                main_header.setLayoutParams(params);
-            }
-
-            // 하단 바의 마진을 조절합니다.
-            if (underbar != null && underbar.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) underbar.getLayoutParams();
-                params.bottomMargin = bottomInset + oneDp;
-                underbar.setLayoutParams(params);
-            }
-
-            return WindowInsetsCompat.CONSUMED; // Insets을 소비했음을 시스템에 알립니다.
         });
     }
 }
