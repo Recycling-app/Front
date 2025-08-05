@@ -39,6 +39,14 @@
           }
         },
         {
+          "client_id": "838424729978-ubql3s7tivjo4t2h43bfv51dn2i0bgvq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.recycling_app",
+            "certificate_hash": "fd78af85d3db832e9357cc248a60b193c80b0952"
+          }
+        },
+        {
           "client_id": "838424729978-ifig8jp5v4k75up5q0hgccv273ptcld3.apps.googleusercontent.com",
           "client_type": 3
         }
