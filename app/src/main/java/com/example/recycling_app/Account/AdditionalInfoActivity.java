@@ -13,14 +13,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.recycling_app.MainscreenActivity;
 import com.example.recycling_app.R;
+import com.example.recycling_app.StartscreenActivity;
 import com.example.recycling_app.api.ApiService;
 import com.example.recycling_app.dto.UserSignupRequest;
 import com.example.recycling_app.Network.RetrofitClient;
 import com.example.recycling_app.ui.dialog.SelectionDialogFragment;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,9 +39,8 @@ public class AdditionalInfoActivity extends AppCompatActivity implements Selecti
     private TextView textViewGender;
     private TextView textViewRegion;
     private Button buttonSignup;
-
     private ApiService apiService;
-
+    private FirebaseFirestore db;
     private String userEmail;
     private String userPassword;
     private String userName;
@@ -186,5 +190,34 @@ public class AdditionalInfoActivity extends AppCompatActivity implements Selecti
                 Log.e(TAG, "회원가입 요청 실패 (네트워크 오류)", t);
             }
         });
+    }
+
+    private void saveUserToFirestore(UserSignupRequest user) {
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put("email", user.getEmail());
+        userMap.put("name", user.getName());
+        userMap.put("age", user.getAge());
+        userMap.put("gender", user.getGender());
+        userMap.put("region", user.getRegion());
+        userMap.put("isGoogleUser", true); // 이 액티비티에서는 항상 true
+
+        db.collection("users").document(user.getEmail())
+                .set(userMap, SetOptions.merge())
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "Firestore에 사용자 정보 저장 성공");
+                    Toast.makeText(AdditionalInfoActivity.this, "회원가입 완료!", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(AdditionalInfoActivity.this, StartscreenActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Firestore에 사용자 정보 저장 실패", e);
+                    Toast.makeText(AdditionalInfoActivity.this, "Firestore 저장 실패. 백엔드에는 회원가입 완료되었습니다.", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(AdditionalInfoActivity.this, StartscreenActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                });
     }
 }
