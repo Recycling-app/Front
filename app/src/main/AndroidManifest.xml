@@ -23,7 +23,7 @@
     </queries>
 
     <application
-        android:name=".Network.GlobalApplication"
+        android:name=".network.GlobalApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"

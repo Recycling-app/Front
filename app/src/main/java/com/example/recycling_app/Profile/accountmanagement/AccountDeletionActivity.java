@@ -23,7 +23,7 @@ import com.example.recycling_app.MainscreenActivity;
 import com.example.recycling_app.Profile.MypageActivity;
 import com.example.recycling_app.StartscreenActivity;
 import com.example.recycling_app.R;
-import com.example.recycling_app.Network.RetrofitClient;
+import com.example.recycling_app.network.RetrofitClient;
 import com.example.recycling_app.service.ProfileApiService;
 import com.google.firebase.auth.FirebaseAuth; // Firebase 인증 import
 import com.google.firebase.auth.FirebaseUser; // Firebase 사용자 import

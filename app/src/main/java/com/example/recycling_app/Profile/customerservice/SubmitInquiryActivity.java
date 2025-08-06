@@ -24,7 +24,7 @@ import com.example.recycling_app.Profile.MypageActivity;
 import com.example.recycling_app.R;
 import com.example.recycling_app.dto.InquiryDTO;
 import com.example.recycling_app.service.ProfileApiService;
-import com.example.recycling_app.Network.RetrofitClient;
+import com.example.recycling_app.network.RetrofitClient;
 
 // Firebase 관련 import 제거
 // import com.google.firebase.auth.FirebaseAuth;

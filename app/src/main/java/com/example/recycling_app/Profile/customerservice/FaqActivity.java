@@ -27,7 +27,7 @@ import com.example.recycling_app.Profile.profieedit.ProfileActivity;
 import com.example.recycling_app.R;
 import com.example.recycling_app.dto.FaqDTO; // FAQ 데이터 DTO
 import com.example.recycling_app.service.ProfileApiService; // 백엔드 프로필 API 서비스 인터페이스
-import com.example.recycling_app.Network.RetrofitClient; // Retrofit 클라이언트 (API 서비스 인스턴스 생성)
+import com.example.recycling_app.network.RetrofitClient; // Retrofit 클라이언트 (API 서비스 인스턴스 생성)
 
 import java.util.ArrayList; // 동적 배열 리스트
 import java.util.List; // 리스트 컬렉션

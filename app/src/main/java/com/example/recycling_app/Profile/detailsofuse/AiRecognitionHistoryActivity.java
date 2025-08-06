@@ -22,7 +22,7 @@ import com.bumptech.glide.Glide; // 이미지 로딩 라이브러리 Glide
 import com.example.recycling_app.R;
 import com.example.recycling_app.dto.AiRecognitionRecordDTO; // AI 인식 기록 데이터 DTO
 import com.example.recycling_app.service.ProfileApiService; // 백엔드 프로필 API 서비스 인터페이스
-import com.example.recycling_app.Network.RetrofitClient; // Retrofit 클라이언트 (API 서비스 인스턴스 생성)
+import com.example.recycling_app.network.RetrofitClient; // Retrofit 클라이언트 (API 서비스 인스턴스 생성)
 
 import java.text.SimpleDateFormat; // 날짜와 시간을 특정 형식으로 포맷
 import java.util.ArrayList; // 동적 배열 리스트

@@ -23,7 +23,7 @@ import com.example.recycling_app.MainscreenActivity;
 import com.example.recycling_app.Profile.MypageActivity;
 import com.example.recycling_app.R;
 import com.example.recycling_app.util.AuthManager; // AuthManager 임포트
-import com.example.recycling_app.Network.RetrofitClient; // RetrofitClient 임포트
+import com.example.recycling_app.network.RetrofitClient; // RetrofitClient 임포트
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

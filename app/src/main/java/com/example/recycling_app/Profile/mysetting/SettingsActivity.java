@@ -29,7 +29,7 @@ import com.example.recycling_app.Profile.profieedit.ProfileActivity;
 import com.example.recycling_app.R;
 import com.example.recycling_app.dto.LanguageDTO;
 import com.example.recycling_app.service.ProfileApiService;
-import com.example.recycling_app.Network.RetrofitClient; // RetrofitClient import 확인
+import com.example.recycling_app.network.RetrofitClient; // RetrofitClient import 확인
 import com.example.recycling_app.util.AuthManager; // AuthManager import 확인
 
 import retrofit2.Call;

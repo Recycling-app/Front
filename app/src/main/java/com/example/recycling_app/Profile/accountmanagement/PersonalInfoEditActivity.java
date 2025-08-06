@@ -29,7 +29,7 @@ import com.example.recycling_app.Profile.MypageActivity;
 import com.example.recycling_app.R;
 import com.example.recycling_app.dto.ProfileDTO; // 사용자 프로필 데이터 전송 객체 (DTO) 임포트
 import com.example.recycling_app.service.ProfileApiService; // 프로필 관련 API 서비스 인터페이스 임포트
-import com.example.recycling_app.Network.RetrofitClient; // Retrofit 클라이언트 (API 서비스 인스턴스 생성) util 패키지 확인
+import com.example.recycling_app.network.RetrofitClient; // Retrofit 클라이언트 (API 서비스 인스턴스 생성) util 패키지 확인
 
 import com.google.firebase.auth.FirebaseAuth; // Firebase 인증 import
 import com.google.firebase.auth.FirebaseUser; // Firebase 사용자 import
