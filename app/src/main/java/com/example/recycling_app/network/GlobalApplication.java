@@ -1,7 +1,7 @@
-package com.example.recycling_app.Network;
+package com.example.recycling_app.network;
 
 import android.app.Application;
-import com.example.recycling_app.Network.RetrofitClient;
+import com.example.recycling_app.network.RetrofitClient;
 
 public class GlobalApplication extends Application {
     @Override

@@ -28,7 +28,7 @@ import com.example.recycling_app.MainscreenActivity;
 import com.example.recycling_app.Profile.MypageActivity;
 import com.example.recycling_app.Profile.mysetting.CustomGalleryActivity;
 import com.example.recycling_app.R;
-import com.example.recycling_app.Network.RetrofitClient;
+import com.example.recycling_app.network.RetrofitClient;
 import com.example.recycling_app.dto.ProfileDTO;
 import com.example.recycling_app.service.ProfileApiService;
 import com.bumptech.glide.Glide;

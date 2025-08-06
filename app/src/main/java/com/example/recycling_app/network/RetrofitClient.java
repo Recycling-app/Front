@@ -1,4 +1,4 @@
-package com.example.recycling_app.Network;
+package com.example.recycling_app.network;
 
 import android.content.Context;
 

@@ -1,4 +1,4 @@
-package com.example.recycling_app.Network;
+package com.example.recycling_app.network;
 
 import android.app.Application;
 import com.google.firebase.FirebaseApp;
