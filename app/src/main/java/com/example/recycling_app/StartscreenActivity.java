@@ -8,20 +8,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.example.recycling_app.Account.Googleuser_AdditionalInfoActivity;
+import com.example.recycling_app.Account.LoginActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
 import com.example.recycling_app.Account.FindInfoActivity;
-import com.example.recycling_app.Account.LoginActivity;
 import com.example.recycling_app.Account.SignupActivity;
 import com.example.recycling_app.api.ApiService;
-import com.example.recycling_app.Network.RetrofitClient;
+import com.example.recycling_app.network.RetrofitClient;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -77,6 +80,15 @@ public class StartscreenActivity extends AppCompatActivity {
         findInfoTextView.setOnClickListener(v -> {
             Intent intent = new Intent(StartscreenActivity.this, FindInfoActivity.class);
             startActivity(intent);
+        });
+
+        // EdgeToEdge 관련 코드: 시스템 바(상단바, 하단바)의 인셋을 고려하여 뷰의 패딩을 조정
+        // 이 코드는 레이아웃이 시스템 바 아래로 확장될 때 콘텐츠가 시스템 바에 가려지지 않도록 함
+        // 시스템 바의 인셋만큼 뷰의 좌, 상, 우, 하 패딩을 설정
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_layout), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
         });
 
         // 상단바 아이콘과 글씨 색상을 어둡게 설정 (Light Mode)
