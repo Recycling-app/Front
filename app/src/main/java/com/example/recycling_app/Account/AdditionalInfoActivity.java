@@ -8,28 +8,28 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
-import com.example.recycling_app.MainscreenActivity;
 import com.example.recycling_app.R;
 import com.example.recycling_app.StartscreenActivity;
 import com.example.recycling_app.api.ApiService;
 import com.example.recycling_app.dto.UserSignupRequest;
-import com.example.recycling_app.Network.RetrofitClient;
 import com.example.recycling_app.ui.dialog.SelectionDialogFragment;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class AdditionalInfoActivity extends AppCompatActivity implements SelectionDialogFragment.OnItemSelectedListener {
 
@@ -46,12 +46,16 @@ public class AdditionalInfoActivity extends AppCompatActivity implements Selecti
     private String userName;
     private String userPhoneNumber;
 
+    private FirebaseAuth mAuth; // Firebase Authentication 인스턴스
+    private DatabaseReference mDatabase; // Firebase Realtime Database 인스턴스
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_additional_info);
 
-        apiService = RetrofitClient.getApiService();
+        mAuth = FirebaseAuth.getInstance(); // Authentication 초기화
+        mDatabase = FirebaseDatabase.getInstance().getReference(); // Realtime Database 초기화
 
         userEmail = getIntent().getStringExtra("email");
         userPassword = getIntent().getStringExtra("password");
@@ -99,6 +103,22 @@ public class AdditionalInfoActivity extends AppCompatActivity implements Selecti
                 attemptSignup();
             }
         });
+
+        // EdgeToEdge 관련 코드: 시스템 바(상단바, 하단바)의 인셋을 고려하여 뷰의 패딩을 조정
+        // 이 코드는 레이아웃이 시스템 바 아래로 확장될 때 콘텐츠가 시스템 바에 가려지지 않도록 함
+        // 시스템 바의 인셋만큼 뷰의 좌, 상, 우, 하 패딩을 설정
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_layout), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        // 상단바 아이콘과 글씨 색상을 어둡게 설정 (Light Mode)
+        WindowInsetsControllerCompat windowInsetsController =
+                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        if (windowInsetsController != null) {
+            windowInsetsController.setAppearanceLightStatusBars(true);
+        }
     }
 
     private List<String> generateAgeList() {
@@ -138,73 +158,40 @@ public class AdditionalInfoActivity extends AppCompatActivity implements Selecti
 
         int age = Integer.parseInt(ageStr);
 
-        // UserSignupRequest DTO 생성: 백엔드 DTO의 순서에 맞춰 매개변수 순서 조정
-        // 백엔드 DTO: email, name, password, phoneNumber, age, gender, region
-        UserSignupRequest signupRequest = new UserSignupRequest(
-                userEmail,       // email
-                userName,        // name
-                userPassword,    // password
-                userPhoneNumber, // phoneNumber
-                age,             // age
-                gender,          // gender
-                region,           // region
-                false
-        );
+        // Firebase Authentication에 사용자 등록
+        mAuth.createUserWithEmailAndPassword(userEmail, userPassword)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "createUserWithEmail:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
 
-        Call<String> call = apiService.signupUser(signupRequest);
-
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if (response.isSuccessful()) {
-                    String successMessage = response.body();
-                    Toast.makeText(AdditionalInfoActivity.this, successMessage != null ? successMessage : "회원가입 성공!", Toast.LENGTH_LONG).show();
-                    Log.d(TAG, "회원가입 성공: " + signupRequest.getEmail());
-
-                    Intent intent = new Intent(AdditionalInfoActivity.this, MainscreenActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    String errorMessage = "회원가입 실패: ";
-                    try {
-                        if (response.errorBody() != null) {
-                            String errorBodyString = response.errorBody().string();
-                            Log.e(TAG, "Error Body: " + errorBodyString);
-                            errorMessage += errorBodyString;
-                        } else {
-                            errorMessage += "알 수 없는 오류 발생.";
+                        // Realtime Database에 사용자 정보 저장
+                        if (user != null) {
+                            writeNewUser(user.getUid(), userEmail, userName, userPhoneNumber, age, gender, region);
                         }
-                    } catch (Exception e) {
-                        Log.e(TAG, "Error parsing error body", e);
-                        errorMessage += "응답 처리 중 오류 발생.";
-                    }
-                    Toast.makeText(AdditionalInfoActivity.this, errorMessage, Toast.LENGTH_LONG).show();
-                    Log.e(TAG, "회원가입 응답 실패: HTTP " + response.code() + " " + response.message());
-                }
-            }
 
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Toast.makeText(AdditionalInfoActivity.this, "네트워크 오류: " + t.getMessage(), Toast.LENGTH_LONG).show();
-                Log.e(TAG, "회원가입 요청 실패 (네트워크 오류)", t);
-            }
-        });
+                    } else {
+                        Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                        Toast.makeText(AdditionalInfoActivity.this, "회원가입 실패: " + task.getException().getMessage(),
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
-    private void saveUserToFirestore(UserSignupRequest user) {
-        Map<String, Object> userMap = new HashMap<>();
-        userMap.put("email", user.getEmail());
-        userMap.put("name", user.getName());
-        userMap.put("age", user.getAge());
-        userMap.put("gender", user.getGender());
-        userMap.put("region", user.getRegion());
-        userMap.put("isGoogleUser", true); // 이 액티비티에서는 항상 true
+    // Realtime Database에 사용자 정보 저장하는 메서드
+    private void writeNewUser(String userId, String userEmail, String userName, String userPhoneNumber, int age, String gender, String region) {
+        UserSignupRequest user = new UserSignupRequest(
+                userEmail,      // email
+                userName,       // name
+                userPhoneNumber, // phoneNumber
+                age,        // age
+                gender,     // gender
+                region,     // region
+                false       // isGoogleUser
+        );
 
-        db.collection("users").document(user.getEmail())
-                .set(userMap, SetOptions.merge())
+        mDatabase.child("users").child(userId).setValue(user)
                 .addOnSuccessListener(aVoid -> {
-                    Log.d(TAG, "Firestore에 사용자 정보 저장 성공");
                     Toast.makeText(AdditionalInfoActivity.this, "회원가입 완료!", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(AdditionalInfoActivity.this, StartscreenActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -212,8 +199,8 @@ public class AdditionalInfoActivity extends AppCompatActivity implements Selecti
                     finish();
                 })
                 .addOnFailureListener(e -> {
-                    Log.e(TAG, "Firestore에 사용자 정보 저장 실패", e);
-                    Toast.makeText(AdditionalInfoActivity.this, "Firestore 저장 실패. 백엔드에는 회원가입 완료되었습니다.", Toast.LENGTH_LONG).show();
+                    Log.e(TAG, "Realtime Database 저장 실패", e);
+                    Toast.makeText(AdditionalInfoActivity.this, "데이터베이스 저장 실패.", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(AdditionalInfoActivity.this, StartscreenActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);

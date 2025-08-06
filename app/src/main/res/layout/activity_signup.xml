@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#B5F8DB"
@@ -38,7 +39,9 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="10dp"
-            android:background="#B0B0B0" /> <EditText
+            android:background="#B0B0B0" />
+
+        <EditText
         android:id="@+id/edit_text_id"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

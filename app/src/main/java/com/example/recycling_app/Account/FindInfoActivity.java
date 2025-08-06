@@ -2,12 +2,14 @@ package com.example.recycling_app.Account;
 
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -37,22 +39,23 @@ public class FindInfoActivity extends AppCompatActivity {
             setTabSelected(buttonResetPassword, false);
         }
 
-        buttonFindEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadFragment(new FindEmailFragment());
-                setTabSelected(buttonFindEmail, true);
-                setTabSelected(buttonResetPassword, false);
-            }
+        buttonFindEmail.setOnClickListener(v -> {
+            loadFragment(new FindEmailFragment());
+            setTabSelected(buttonFindEmail, true);
+            setTabSelected(buttonResetPassword, false);
         });
 
-        buttonResetPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadFragment(new ResetPasswordFragment());
-                setTabSelected(buttonResetPassword, true);
-                setTabSelected(buttonFindEmail, false);
-            }
+        buttonResetPassword.setOnClickListener(v -> {
+            loadFragment(new ResetPasswordFragment());
+            setTabSelected(buttonResetPassword, true);
+            setTabSelected(buttonFindEmail, false);
+        });
+
+        // EdgeToEdge 관련 코드: 시스템 바(상단바, 하단바)의 인셋을 고려하여 뷰의 패딩을 조정합니다.
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_layout), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
         });
 
         // 상단바 아이콘과 글씨 색상을 어둡게 설정 (Light Mode)
@@ -63,7 +66,11 @@ public class FindInfoActivity extends AppCompatActivity {
         }
     }
 
-    private void loadFragment(Fragment fragment) {
+    /**
+     * 지정된 프래그먼트를 프래그먼트 컨테이너에 로드합니다.
+     * @param fragment 로드할 Fragment 객체
+     */
+    public void loadFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);
@@ -73,13 +80,11 @@ public class FindInfoActivity extends AppCompatActivity {
     // 탭 선택 상태에 따라 배경 틴트와 텍스트 색상을 설정하는 헬퍼 메서드
     private void setTabSelected(Button button, boolean isSelected) {
         if (isSelected) {
-            // 선택된 탭: 새로운 색상 (90E2A1) 적용
             button.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.selected_tab_color)));
-            button.setTextColor(ContextCompat.getColor(this, R.color.black)); // 텍스트 색상 검정
+            button.setTextColor(ContextCompat.getColor(this, R.color.black));
         } else {
-            // 선택되지 않은 탭: 흰색 배경
             button.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.white)));
-            button.setTextColor(ContextCompat.getColor(this, R.color.black)); // 텍스트 색상 검정
+            button.setTextColor(ContextCompat.getColor(this, R.color.black));
         }
     }
 }

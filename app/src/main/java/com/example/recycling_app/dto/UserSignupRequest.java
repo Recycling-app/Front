@@ -28,44 +28,69 @@ public class UserSignupRequest {
     @SerializedName("isGoogleUser")
     private boolean isGoogleUser;
 
-    public UserSignupRequest(String email, String name, String password, String phoneNumber, int age, String gender, String region, boolean isGoogleUser) {
-        this.email = email;
-        this.name = name;
-        this.password = password;
-        this.phoneNumber = phoneNumber;
+    public UserSignupRequest(String userEmail, String userName, String userPhoneNumber, int age, String gender, String region, boolean b) {
+        this.email = userEmail;
+        this.name = userName;
+        this.phoneNumber = userPhoneNumber;
         this.age = age;
         this.gender = gender;
         this.region = region;
         this.isGoogleUser = isGoogleUser;
-
     }
 
     public String getEmail() {
         return email;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {
         return password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public int getAge() {
         return age;
     }
 
+    public void setAge(int age) {
+        this.age = age;
+    }
+
     public String getGender() {
         return gender;
     }
 
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
     public String getRegion() {
         return region;
+    }
+    public void setRegion(String region) {
+        this.region = region;
     }
 
     public boolean isGoogleUser() {
