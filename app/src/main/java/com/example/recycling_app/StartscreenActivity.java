@@ -24,7 +24,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.example.recycling_app.Account.FindInfoActivity;
 import com.example.recycling_app.Account.SignupActivity;
 import com.example.recycling_app.api.ApiService;
-import com.example.recycling_app.network.RetrofitClient;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -48,8 +47,6 @@ public class StartscreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        apiService = RetrofitClient.getApiService();
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();

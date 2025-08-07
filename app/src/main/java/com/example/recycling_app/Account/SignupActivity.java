@@ -38,9 +38,6 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-//        fAuth = FirebaseAuth.getInstance(); // FirebaseAuth 초기화
-//        dRef = FirebaseDatabase.getInstance().getReference();
-
         button_signup = (Button) findViewById(R.id.button_signup);
 
         editTextEmail = (EditText) findViewById(R.id.edit_text_id);
