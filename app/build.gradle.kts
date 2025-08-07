@@ -77,6 +77,7 @@ configurations.all {
 
 dependencies {
     implementation(libs.androidx.room.compiler)
+    implementation(libs.firebase.database)
     val cameraxVersion = "1.3.4"
     implementation("androidx.camera:camera-core:${cameraxVersion}")
     implementation("androidx.camera:camera-camera2:${cameraxVersion}")
@@ -101,6 +102,8 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
     implementation("com.google.android.gms:play-services-auth:21.2.0")
     implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
+    implementation("androidx.appcompat:appcompat:1.6.0")
+    implementation("androidx.fragment:fragment:1.6.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
