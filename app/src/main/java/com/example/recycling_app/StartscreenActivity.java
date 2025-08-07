@@ -166,7 +166,5 @@ public class StartscreenActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        // 이전 코드의 자동 로그인 로직은 제거.
-        // 사용자가 명시적으로 로그인/회원가입을 선택하도록 함.
     }
 }
