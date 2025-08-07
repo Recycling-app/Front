@@ -61,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("MainActivity", "로그인 시도 완료");
                         if (task.isSuccessful()) {
                             Log.d("MainActivity", "로그인 성공");
+                            Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(LoginActivity.this, MainscreenActivity.class);
                             startActivity(intent);
                         } else {
