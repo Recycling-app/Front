@@ -65,7 +65,7 @@ public class SelectionDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.dialog_selection_list, null); // 새로 생성할 다이얼로그 레이아웃
 
         TextView titleTextView = view.findViewById(R.id.dialog_title);
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_view_dialog_selection);
+        RecyclerView recyclerView = view.findViewById(R.id.recycling_list_view);
 
         titleTextView.setText(dialogTitle);
 

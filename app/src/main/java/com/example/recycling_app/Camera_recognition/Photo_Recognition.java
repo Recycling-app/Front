@@ -1,5 +1,6 @@
 package com.example.recycling_app.Camera_recognition;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -11,9 +12,13 @@ import android.provider.MediaStore;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +31,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.example.recycling_app.Account.LoginActivity;
@@ -41,6 +47,8 @@ import com.google.ai.client.generativeai.type.GenerateContentResponse;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.pytorch.IValue;
 import org.pytorch.LiteModuleLoader;
@@ -67,15 +75,19 @@ public class Photo_Recognition extends AppCompatActivity {
     private TextView titleTextView;
     private TextView resultTextView;
     private ProgressBar progressBar;
+    private ImageButton recycling_baseline_list;
+    private FirebaseFirestore db;
     private final List<Module> pytorchModules = new ArrayList<>();
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private final AtomicBoolean isModelLoaded = new AtomicBoolean(false);
 
+    // 현재 인식된 분류 결과 저장
+    private String currentClassification = "";
+
     // Gemini API 응답을 저장할 캐시 맵 추가
     private final Map<String, String> geminiCache = new HashMap<>();
-
     private final String[] modelFiles = {"Train_model8.ptl", "Train_model13.ptl"};
-    private final String[] classLabels = new String[]{"건전지", "금속", "비닐", "스티로폼", "유리", "종이", "종이박스", "플라스틱", "형광등"};
+    private final String[] classLabels = new String[]{"금속캔", "비닐", "스티로폼", "유리", "종이", "플라스틱", "페트병"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,10 +100,17 @@ public class Photo_Recognition extends AppCompatActivity {
         titleTextView = findViewById(R.id.titleTextView);
         resultTextView = findViewById(R.id.resultTextView);
         progressBar = findViewById(R.id.progressBar);
+        recycling_baseline_list = findViewById(R.id.recycling_baseline_list);
+
+        // Firebase Firestore 초기화
+        db = FirebaseFirestore.getInstance();
 
         setupBottomNavigation();
         setupSystemBars();
         loadPytorchModels();
+
+        // 오른쪽 아래 버튼 클릭 리스너 추가
+        setupOptionsButton();
 
         String imageUriString = getIntent().getStringExtra("imageUri");
         if (imageUriString == null) {
@@ -131,6 +150,136 @@ public class Photo_Recognition extends AppCompatActivity {
                 WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
         if (windowInsetsController != null) {
             windowInsetsController.setAppearanceLightStatusBars(true);
+        }
+    }
+
+    // 오른쪽 아래 옵션 버튼 설정
+    private void setupOptionsButton() {
+        recycling_baseline_list.setOnClickListener(v -> showOptionsDialog());
+    }
+
+    // 옵션 선택 다이얼로그 표시
+    private void showOptionsDialog() {
+        // 1. 커스텀 XML 레이아웃을 inflate하여 View 객체로 만듭니다.
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_selection_list, null);
+
+        // 2. 다이얼로그에 표시할 데이터
+        String[] recyclingTypes = {
+                "플라스틱", "유리병", "금속", "비닐", "종이", "페트병", "스티로폼", "폐휴대폰", "폐소형가전", "폐의약품", "의류", "폐건전지", "폐형광등"
+        };
+
+        // 3. ListView와 ArrayAdapter를 사용하여 데이터와 뷰를 연결합니다.
+        ListView recyclingListView = dialogView.findViewById(R.id.recycling_list_view);
+        // ArrayAdapter를 생성할 때 커스텀 레이아웃 사용
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                R.layout.dialog_selection_list_style, R.id.recycling_type_text, recyclingTypes);
+        recyclingListView.setAdapter(adapter);
+
+        // 4. AlertDialog.Builder를 사용하여 다이얼로그를 설정합니다.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyAlertDialogTheme);
+        builder.setView(dialogView);
+
+        // 5. 다이얼로그를 생성하고 리스트뷰의 클릭 리스너를 설정합니다.
+        AlertDialog dialog = builder.create();
+        recyclingListView.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedType = recyclingTypes[position];
+            updateClassificationResult(selectedType);
+            Toast.makeText(this, selectedType + "(으)로 변경되었습니다.", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+        });
+
+        // 6. 취소 버튼을 추가합니다 (선택 사항)
+        TextView cancelButton = dialogView.findViewById(R.id.dialog_title);
+
+        dialog.show();
+    }
+
+    // 선택된 분류로 결과 업데이트
+    private void updateClassificationResult(String newClassification) {
+        currentClassification = newClassification;
+
+        // 이미지 업데이트
+        int resultImageId = getDrawableIdForClassification(newClassification);
+        resultImageView.setImageResource(resultImageId);
+
+        // 제목 업데이트
+        SpannableStringBuilder titleTextBuilder = new SpannableStringBuilder();
+        Drawable drawable = getResources().getDrawable(R.drawable.recyclecontainer, getTheme());
+        int size = (int) (titleTextView.getTextSize() * 1.2);
+        drawable.setBounds(0, 0, size, size);
+        ImageSpan imageSpan = new ImageSpan(drawable, ImageSpan.ALIGN_BOTTOM);
+        titleTextBuilder.append(" ", imageSpan, 0)
+                .append(" ")
+                .append("분리수거 종류 : ")
+                .append(newClassification);
+        titleTextView.setText(titleTextBuilder);
+
+        // Firebase에서 분리수거 정보 가져오기
+        progressBar.setVisibility(View.VISIBLE);
+        getRecyclingDataFromFirebase(newClassification);
+    }
+
+    private void getRecyclingDataFromFirebase(String classificationType) {
+        // Firebase 문서 이름 매핑 (필요에 따라 조정)
+        String documentName = getFirebaseDocumentName(classificationType);
+
+        db.collection("Separate_recycling")
+                .document(documentName)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    progressBar.setVisibility(View.GONE);
+                    if (documentSnapshot.exists()) {
+                        // 문서에서 데이터 추출
+                        // instructions 필드는 List<String> 타입으로 가져옵니다.
+                        List<String> instructions = (List<String>) documentSnapshot.get("instructions");
+                        String description = documentSnapshot.getString("description"); // description 필드가 있다면 가져옴
+
+                        // 데이터 조합하여 표시
+                        StringBuilder resultText = new StringBuilder();
+
+                        if (description != null && !description.isEmpty()) {
+                            resultText.append(description).append("\n\n");
+                        }
+
+                        if (instructions != null && !instructions.isEmpty()) {
+                            // 배열의 각 항목을 반복문을 통해 StringBuilder에 추가
+                            for (String instruction : instructions) {
+                                resultText.append("• ").append(instruction).append("\n\n");
+                            }
+                        }
+
+                        // 결과가 비어있지 않으면 표시, 비어있으면 기본 메시지
+                        if (resultText.length() > 0) {
+                            resultTextView.setText(resultText.toString().trim());
+                        } else {
+                            resultTextView.setText("'" + classificationType + "'(으)로 분류되었습니다.\n분리수거 정보를 불러오는 중입니다.");
+                        }
+                    } else {
+                        // 문서가 존재하지 않는 경우 Gemini API 사용
+                        Log.d("Firebase", "문서가 존재하지 않음: " + documentName + ", Gemini API 사용");
+                        askGemini(classificationType);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    progressBar.setVisibility(View.GONE);
+                    Log.e("Firebase", "데이터 가져오기 실패", e);
+                    // Firebase 실패 시 Gemini API로 대체
+                    askGemini(classificationType);
+                });
+    }
+
+    // 분류 이름을 Firebase 문서 이름으로 매핑
+    private String getFirebaseDocumentName(String classification) {
+        switch (classification) {
+            case "플라스틱": return "plastic";
+            case "유리병": return "glass_bottle";
+            case "금속캔": return "metal";
+            case "비닐": return "plasticbag";
+            case "종이": return "paper";
+            case "페트병": return "plastic_bottle";
+            case "스티로폼": return "styrofoam";
+            default: return classification.toLowerCase();
         }
     }
 
@@ -187,14 +336,15 @@ public class Photo_Recognition extends AppCompatActivity {
             return; // 캐시된 결과가 있으면 API 호출 없이 바로 반환
         }
 
-        GenerativeModel gm = new GenerativeModel("gemini-2.5-flash", BuildConfig.GEMINI_API_KEY);
+        GenerativeModel gm = new GenerativeModel("gemini-2.5-pro", BuildConfig.GEMINI_API_KEY);
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
         String prompt = String.format(
                 "'" + photoresultname + "'분리수거 방법을 알려주세요. 아래 조건들을 반드시 지켜주세요:\n" +
-                        "단계별로 번호를 붙여 설명해주세요 (예: 1. , 2. , 3. ).\n" +
-                        "각 단계는 간결한 문장으로 작성해주세요.\n" +
-                        "특수문자나 기호는 사용하지 마세요.\n" +
-                        "각 단계 사이에 한 줄씩 띄어주세요."
+                        "단계별로 번호를 붙여 설명" +
+                        "각 단계는 간결한 문장으로 작성" +
+                        "특수문자나 기호는 사용하지 마세요." +
+                        "각 단계 사이에 한 줄씩 띄어주세요." +
+                        "방법은 최대 3개로 해서 압축해서 알려주세요"
         );
         Content content = new Content.Builder().addText(prompt).build();
 
@@ -247,15 +397,13 @@ public class Photo_Recognition extends AppCompatActivity {
     @DrawableRes
     private int getDrawableIdForClassification(String classification) {
         switch (classification) {
-            case "건전지": return R.drawable.battery_recycle_img;
             case "금속": return R.drawable.metal_recycle_img;
             case "비닐": return R.drawable.plasticbag_recycle_img;
             case "스티로폼": return R.drawable.styrofoam_recycle_img;
-            case "유리": return R.drawable.glassbottle_recycle_img;
+            case "유리병": return R.drawable.glassbottle_recycle_img;
             case "종이": return R.drawable.paper_recycle_img;
-            case "종이박스": return R.drawable.paperbox_recycle_img;
             case "플라스틱": return R.drawable.plastic_recycle_img;
-            case "형광등": return R.drawable.fluorescent_lamp_recycle_img;
+            case "페트병": return R.drawable.plastic_bottle_recycle_img;
             default: return R.drawable.recycle_prohibition;
         }
     }
