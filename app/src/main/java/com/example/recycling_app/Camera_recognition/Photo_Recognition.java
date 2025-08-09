@@ -279,6 +279,13 @@ public class Photo_Recognition extends AppCompatActivity {
             case "종이": return "paper";
             case "페트병": return "plastic_bottle";
             case "스티로폼": return "styrofoam";
+            case "폐의약품": return "unused_medicines";
+            case "의류": return "used_clothing";
+            case "폐건전지": return "waste_battery";
+            case "폐형광등": return "waste_fluorescent_lamp";
+            case "폐휴대폰": return "waste_phone";
+            case "폐소형가전": return "waste_home_appliances";
+
             default: return classification.toLowerCase();
         }
     }
